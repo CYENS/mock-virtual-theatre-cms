@@ -15,6 +15,7 @@
     "apollo-server": "^3.13.0",
     "better-sqlite3": "^11.7.2",
     "graphql": "^16.10.0",
+    "graphql-tag": "^2.12.6",
     "sqlite3": "^5.1.7"
   },
   "type": "module"
