@@ -1,0 +1,19 @@
+{
+  "name": "MockVirtualTheatreCMS",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "apollo-server": "^3.13.0",
+    "better-sqlite3": "^11.7.2",
+    "graphql": "^16.10.0",
+    "sqlite3": "^5.1.7"
+  },
+  "type": "module"
+}
