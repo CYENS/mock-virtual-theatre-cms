@@ -1,0 +1,26 @@
+﻿version: "3.8"
+
+services:
+  # Node.js + GraphQL server
+  app:
+    container_name: graphql-app
+    build: .
+    ports:
+      - "4000:4000"  # Exposes GraphQL server on localhost:4000
+    volumes:
+      - ./virtual_theatre.db:/usr/src/app/virtual_theatre.db
+    depends_on:
+      - sqlite-web
+
+  sqlite-web:
+    image: ghcr.io/coleifer/sqlite-web:latest
+    container_name: sqlite-web
+    # Expose port 8080 so you can browse via http://localhost:8080
+    ports:
+      - "8080:8080"
+    # Mount your local directory (containing the database) into /data
+    volumes:
+      - ./virtual_theatre.db:/data/virtual_theatre.db
+    environment:
+      # The name of the SQLite file inside the /data folder
+      - SQLITE_DATABASE=virtual_theatre.db
