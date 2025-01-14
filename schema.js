@@ -20,8 +20,13 @@ export const typeDefs = gql`
   """
   type Scene {
     id: ID
-    name: String
     pcloud_file_id: Int
+    file_url: String
+    title: String
+    owner: User
+    members: [User]
+    template: Boolean
+    public: Boolean
     performances: [Performance]
   }
 
@@ -34,6 +39,7 @@ export const typeDefs = gql`
     owner: User
     about: String
     scenes: [Scene]
+    sessions: [Session]
     avatars: [Avatar]
   }
 

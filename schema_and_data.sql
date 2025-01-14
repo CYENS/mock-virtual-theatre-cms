@@ -27,16 +27,19 @@ CREATE TABLE IF NOT EXISTS users (
 -- Scenes Table
 CREATE TABLE IF NOT EXISTS scenes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    pcloud_file_id INTEGER NOT NULL
+    title TEXT NOT NULL,
+    pcloud_file_id INTEGER NOT NULL,
+    file_url TEXT NOT NULL,
+    owner INTEGER NOT NULL,
+    template INTEGER DEFAULT 0,
+    public INTEGER DEFAULT 0,
+    FOREIGN KEY (owner) REFERENCES users (id)
 );
 
 -- Performances Table
 CREATE TABLE IF NOT EXISTS performances (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
     owner INTEGER NOT NULL,
-    about TEXT,
     FOREIGN KEY (owner) REFERENCES users (id)
 );
 
@@ -164,15 +167,15 @@ INSERT INTO users (name, email, eos_id) VALUES
     ('Bob', 'bob@example.com', 'EOS456'),
     ('Charlie', 'charlie@example.com', 'EOS789');
 
-INSERT INTO scenes (name, pcloud_file_id) VALUES
-    ('Beach Scene', 1001),
-    ('City Scene', 1002),
-    ('Forest Scene', 1003);
+INSERT INTO scenes (title, owner, pcloud_file_id, file_url) VALUES
+    ('Beach Scene', 1, 1001, 'https://example.com/chair.usd'),
+    ('City Scene', 2, 1002, 'https://example.com/chair.usd'),
+    ('Forest Scene', 3, 1003, 'https://example.com/chair.usd');
 
-INSERT INTO performances (title, owner, about) VALUES
-    ('Morning Show', 1, 'A relaxing morning show at the beach.'),
-    ('Evening Drama', 2, 'A thrilling city drama.'),
-    ('Nature Escape', 3, 'A peaceful escape into the forest.');
+INSERT INTO performances (owner) VALUES
+    (1),
+    (2),
+    (3);
 
 INSERT INTO scenes_performances (scene_id, performance_id) VALUES
     (1, 1),

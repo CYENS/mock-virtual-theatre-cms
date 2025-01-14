@@ -91,6 +91,9 @@
         },
 
         Scene: {
+            owner: async (parent) => {
+                return getSingleRow("SELECT * FROM users WHERE id = ?", [parent.owner]);
+            },
             performances: async (parent) => {
                 const query = `
           SELECT p.*
@@ -122,6 +125,14 @@
           JOIN performance_cast pc ON pc.avatar_id = a.id
           WHERE pc.performance_id = ?
         `;
+                return getAllRows(query, [parent.id]);
+            },
+            sessions: async (parent) => {
+                const query = `
+                    SELECT s.*
+                    FROM sessions s
+                    WHERE s.performance_id = ?
+                `;
                 return getAllRows(query, [parent.id]);
             },
         },
