@@ -212,4 +212,6 @@ INSERT INTO light_data (pcloud_file_id, file_url, light_id, position, light_type
     (7001, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}');
 
 INSERT INTO sessions (title, owner, performance_id, motion_data, face_data, light_data, audio_data, prop_data, streaming_url) VALUES
-    ('Morning Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1');
+    ('Morning Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Midday Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Night Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1');

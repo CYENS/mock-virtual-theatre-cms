@@ -1,6 +1,4 @@
-﻿version: "3.8"
-
-services:
+﻿services:
   # Node.js + GraphQL server
   app:
     container_name: graphql-app
