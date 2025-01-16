@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS scenes (
 -- Performances Table
 CREATE TABLE IF NOT EXISTS performances (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
     owner INTEGER NOT NULL,
     FOREIGN KEY (owner) REFERENCES users (id)
 );
@@ -172,10 +174,10 @@ INSERT INTO scenes (title, owner, pCloudFileId, fileUrl) VALUES
     ('City Scene', 2, 1002, 'https://example.com/chair.usd'),
     ('Forest Scene', 3, 1003, 'https://example.com/chair.usd');
 
-INSERT INTO performances (owner) VALUES
-    (1),
-    (2),
-    (3);
+INSERT INTO performances (owner, title, description) VALUES
+    (1, 'Othello', 'Shakespear wrote that'),
+    (2, 'Interstellar', 'Interstellar description'),
+    (3, 'Performance 3', 'Performance 3 description');
 
 INSERT INTO scenesPerformances (sceneId, performanceId) VALUES
     (1, 1),

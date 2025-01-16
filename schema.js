@@ -36,8 +36,8 @@ export const typeDefs = gql`
   type Performance {
     id: ID
     title: String
+    description: String
     owner: User
-    about: String
     scenes: [Scene]
     sessions: [Session]
     avatars: [Avatar]
