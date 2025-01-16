@@ -8,7 +8,7 @@ export const typeDefs = gql`
     id: ID
     name: String
     email: String
-    eos_id: String
+    eosId: String
     performances: [Performance]
     avatars: [Avatar]
     sessionsOwned: [Session]
@@ -20,8 +20,8 @@ export const typeDefs = gql`
   """
   type Scene {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
+    pCloudFileId: Int
+    fileUrl: String
     title: String
     owner: User
     members: [User]
@@ -62,8 +62,8 @@ export const typeDefs = gql`
   type Prop {
     id: ID
     name: String
-    pcloud_file_id: Int
-    file_url: String
+    pCloudFileId: Int
+    fileUrl: String
     position: String
     rotation: String
     scale: String
@@ -75,10 +75,10 @@ export const typeDefs = gql`
   """
   type PropMotionData {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
-    initial_position: String
-    initial_rotation: String
+    pCloudFileId: Int
+    fileUrl: String
+    initialPosition: String
+    initialRotation: String
     prop: Prop
   }
 
@@ -87,10 +87,10 @@ export const typeDefs = gql`
   """
   type AvatarMotionData {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
-    initial_position: String
-    initial_rotation: String
+    pCloudFileId: Int
+    fileUrl: String
+    initialPosition: String
+    initialRotation: String
     avatar: Avatar
   }
 
@@ -99,8 +99,8 @@ export const typeDefs = gql`
   """
   type FaceData {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
+    pCloudFileId: Int
+    fileUrl: String
     avatar: Avatar
   }
 
@@ -109,8 +109,8 @@ export const typeDefs = gql`
   """
   type AudioData {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
+    pCloudFileId: Int
+    fileUrl: String
     avatar: Avatar
   }
 
@@ -119,12 +119,12 @@ export const typeDefs = gql`
   """
   type LightData {
     id: ID
-    pcloud_file_id: Int
-    file_url: String
-    light_id: Int
+    pCloudFileId: Int
+    fileUrl: String
+    lightId: Int
     position: String
-    light_type: String
-    light_characteristics_json: String
+    lightType: String
+    lightCharacteristicsJson: String
   }
 
   """
@@ -136,12 +136,12 @@ export const typeDefs = gql`
     title: String
     owner: User
     performance: Performance
-    motion_data: AvatarMotionData
-    face_data: FaceData
-    light_data: LightData
-    audio_data: AudioData
-    prop_data: Prop
-    streaming_url: String
+    motionData: AvatarMotionData
+    faceData: FaceData
+    lightData: LightData
+    audioData: AudioData
+    propData: Prop
+    streamingUrl: String
     attendees: [User]
   }
 
