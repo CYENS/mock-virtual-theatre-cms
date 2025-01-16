@@ -170,6 +170,7 @@ export const typeDefs = gql`
     # Sessions
     sessions: [Session]
     sessionById(id: ID): Session
+    sessionByState(state: String): [Session]
   }
   
   type Mutation {

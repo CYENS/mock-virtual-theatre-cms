@@ -1,9 +1,4 @@
-﻿async function getStateIdFromState(getSingleRow, state) {
-    const stateRow = await getSingleRow("SELECT id FROM sessionStates WHERE name = ?", [state]);
-    return stateRow.id;
-}
-
-export function createResolvers(db) {
+﻿export function createResolvers(db) {
     // Helper to get multiple rows
     const getAllRows = (query, params = []) =>
         new Promise((resolve, reject) => {
@@ -21,6 +16,11 @@ export function createResolvers(db) {
                 resolve(row);
             });
         });
+    
+    async function getStateIdFromState(state) {
+        const stateRow = await getSingleRow("SELECT id FROM sessionStates WHERE name = ?", [state]);
+        return stateRow.id;
+    }
 
     return {
         Query: {
@@ -71,6 +71,10 @@ export function createResolvers(db) {
             sessionById: async (_, { id }) => {
                 return getSingleRow("SELECT * FROM sessions WHERE id = ?", [id]);
             },
+            sessionByState: async (_, { state } ) => {
+                const stateId = await getStateIdFromState(state);
+                return getAllRows("SELECT * FROM sessions WHERE stateId = ?", [stateId]);
+            }
         },
         
         Mutation: {
@@ -89,7 +93,7 @@ export function createResolvers(db) {
                     streamingUrl = null,
                 } = args;
 
-                const stateId = await getStateIdFromState(getSingleRow, state);
+                const stateId = await getStateIdFromState(state);
                 return new Promise((resolve, reject) => {
                     const query = `
                         INSERT INTO sessions 
