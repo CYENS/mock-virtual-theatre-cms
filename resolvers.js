@@ -1,4 +1,9 @@
-﻿export function createResolvers(db) {
+﻿async function getStateIdFromState(getSingleRow, state) {
+    const stateRow = await getSingleRow("SELECT id FROM sessionStates WHERE name = ?", [state]);
+    return stateRow.id;
+}
+
+export function createResolvers(db) {
     // Helper to get multiple rows
     const getAllRows = (query, params = []) =>
         new Promise((resolve, reject) => {
@@ -75,6 +80,7 @@
                     title,
                     ownerId,
                     performanceId,
+                    state = "inactive",
                     motionDataId = null,
                     faceDataId = null,
                     lightDataId = null,
@@ -82,16 +88,18 @@
                     propDataId = null,
                     streamingUrl = null,
                 } = args;
-                
+
+                const stateId = await getStateIdFromState(getSingleRow, state);
                 return new Promise((resolve, reject) => {
                     const query = `
                         INSERT INTO sessions 
-                        (title, owner, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        (title, owner, stateId, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `;
                     const params = [
                         title,
                         ownerId,
+                        stateId,
                         performanceId,
                         motionDataId,
                         faceDataId,

@@ -177,6 +177,7 @@ export const typeDefs = gql`
       title: String!
       ownerId: ID!
       performanceId: ID!
+      state: String!
       motionDataId: ID
       faceDataId: ID
       lightDataId: ID
