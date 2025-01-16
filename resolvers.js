@@ -67,6 +67,60 @@
                 return getSingleRow("SELECT * FROM sessions WHERE id = ?", [id]);
             },
         },
+        
+        Mutation: {
+            createSession: async (_, args, { dataSources }) => {
+                // Insert the new session into the database
+                const {
+                    title,
+                    ownerId,
+                    performanceId,
+                    motionDataId = null,
+                    faceDataId = null,
+                    lightDataId = null,
+                    audioDataId = null,
+                    propDataId = null,
+                    streamingUrl = null,
+                } = args;
+                
+                return new Promise((resolve, reject) => {
+                    const query = `
+                        INSERT INTO sessions 
+                        (title, owner, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    `;
+                    const params = [
+                        title,
+                        ownerId,
+                        performanceId,
+                        motionDataId,
+                        faceDataId,
+                        lightDataId,
+                        audioDataId,
+                        propDataId,
+                        streamingUrl,
+                    ];
+
+                    db.run(query, params, function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        // Retrieve the newly created session using the last inserted ID
+                        db.get(
+                            "SELECT * FROM sessions WHERE id = ?",
+                            [this.lastID],
+                            (err, newSession) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                resolve(newSession);
+                            }
+                        );
+                    });
+                });
+            },
+        },
 
         // Field resolvers
         User: {

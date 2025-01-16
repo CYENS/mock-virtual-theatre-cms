@@ -170,4 +170,18 @@ export const typeDefs = gql`
     sessions: [Session]
     sessionById(id: ID): Session
   }
+  
+  type Mutation {
+    createSession(
+      title: String!
+      ownerId: ID!
+      performanceId: ID!
+      motionDataId: ID
+      faceDataId: ID
+      lightDataId: ID
+      audioDataId: ID
+      propDataId: ID
+      streamingUrl: String
+    ): Session
+  }
 `;
