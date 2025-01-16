@@ -1,5 +1,6 @@
 ﻿-- Drop existing tables if they exist
 DROP TABLE IF EXISTS userAttendance;
+DROP TABLE IF EXISTS sessionStates;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS performanceCast;
 DROP TABLE IF EXISTS avatars;
@@ -133,11 +134,18 @@ CREATE TABLE IF NOT EXISTS lightData (
     lightCharacteristicsJson TEXT NOT NULL
 );
 
+-- Session States
+CREATE TABLE IF NOT EXISTS sessionStates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
 -- Sessions Table
 CREATE TABLE IF NOT EXISTS sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     owner INTEGER NOT NULL,
+    stateId INTEGER NOT NULL,
     performanceId INTEGER NOT NULL,
     motionData INTEGER DEFAULT NULL,
     faceData INTEGER DEFAULT NULL,
@@ -146,6 +154,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     propData INTEGER DEFAULT NULL,
     streamingUrl TEXT DEFAULT NULL,
     FOREIGN KEY (owner) REFERENCES users (id),
+    FOREIGN KEY (stateId) REFERENCES sessionStates (id) ON DELETE CASCADE,
     FOREIGN KEY (performanceId) REFERENCES performances (id),
     FOREIGN KEY (motionData) REFERENCES avatarMotionData (id),
     FOREIGN KEY (faceData) REFERENCES faceData (id),
@@ -213,7 +222,10 @@ INSERT INTO audioData (pCloudFileId, fileUrl, avatarId) VALUES
 INSERT INTO lightData (pCloudFileId, fileUrl, lightId, position, lightType, lightCharacteristicsJson) VALUES
     (7001, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}');
 
-INSERT INTO sessions (title, owner, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) VALUES
-    ('Morning Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
-    ('Midday Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
-    ('Night Session', 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1');
+INSERT INTO sessionStates (name) VALUES ('inactive'), ('active');
+
+INSERT INTO sessions (title, stateId, owner, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) VALUES
+    ('Morning Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Midday Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Night Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Active Session', 2, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1');

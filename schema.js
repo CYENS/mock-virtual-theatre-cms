@@ -134,6 +134,7 @@ export const typeDefs = gql`
   type Session {
     id: ID
     title: String
+    state: String
     owner: User
     performance: Performance
     motionData: AvatarMotionData

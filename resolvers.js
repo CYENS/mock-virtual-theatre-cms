@@ -280,6 +280,10 @@
                     parent.owner,
                 ]);
             },
+            state: async (parent) => {
+                const row = await  getSingleRow("SELECT * FROM sessionStates WHERE id = ?", [parent.stateId])
+                return row.name;
+            },
             performance: async (parent) => {
                 return getSingleRow("SELECT * FROM performances WHERE id = ?", [
                     parent.performanceId,
