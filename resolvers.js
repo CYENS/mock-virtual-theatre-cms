@@ -33,11 +33,11 @@
             },
 
             // Scenes
-            scenes: async () => {
-                return getAllRows("SELECT * FROM scenes");
+            usdScenes: async () => {
+                return getAllRows("SELECT * FROM usdScenes");
             },
             sceneById: async (_, { id }) => {
-                return getSingleRow("SELECT * FROM scenes WHERE id = ?", [id]);
+                return getSingleRow("SELECT * FROM usdScenes WHERE id = ?", [id]);
             },
 
             // Performances
@@ -164,7 +164,7 @@
             },
         },
 
-        Scene: {
+        USDSceneObject: {
             owner: async (parent) => {
                 return getSingleRow("SELECT * FROM users WHERE id = ?", [
                     parent.owner,
@@ -179,6 +179,15 @@
         `;
                 return getAllRows(query, [parent.id]);
             },
+            members: async (parent) => {
+                const query = `
+                  SELECT s.*
+                  FROM usdScenes s
+                  JOIN usdScene_Member sm ON sm.sceneId = s.id
+                  WHERE sm.userId = ?
+                `;
+                return getAllRows(query, [parent.id]);
+            },
         },
 
         Performance: {
@@ -187,13 +196,13 @@
                     parent.owner,
                 ]);
             },
-            scenes: async (parent) => {
+            usdScenes: async (parent) => {
                 const query = `
-          SELECT s.*
-          FROM scenes s
-          JOIN scenesPerformances sp ON sp.sceneId = s.id
-          WHERE sp.performanceId = ?
-        `;
+                  SELECT s.*
+                  FROM usdScenes s
+                  JOIN scenesPerformances sp ON sp.sceneId = s.id
+                  WHERE sp.performanceId = ?
+                `;
                 return getAllRows(query, [parent.id]);
             },
             avatars: async (parent) => {

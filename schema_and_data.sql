@@ -6,8 +6,9 @@ DROP TABLE IF EXISTS performanceCast;
 DROP TABLE IF EXISTS avatars;
 DROP TABLE IF EXISTS scenesPerformances;
 DROP TABLE IF EXISTS performances;
-DROP TABLE IF EXISTS scenes;
+DROP TABLE IF EXISTS usdScenes;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS usdScene_Member;
 DROP TABLE IF EXISTS propMotionData;
 DROP TABLE IF EXISTS avatarMotionData;
 DROP TABLE IF EXISTS faceData;
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Scenes Table
-CREATE TABLE IF NOT EXISTS scenes (
+CREATE TABLE IF NOT EXISTS usdScenes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     pCloudFileId INTEGER NOT NULL,
@@ -35,6 +36,16 @@ CREATE TABLE IF NOT EXISTS scenes (
     template INTEGER DEFAULT 0,
     public INTEGER DEFAULT 0,
     FOREIGN KEY (owner) REFERENCES users (id)
+);
+    
+-- usdScene_Member Table
+CREATE TABLE IF NOT EXISTS usdScene_Member (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   sceneId INTEGER NOT NULL,
+   userId INTEGER NOT NULL,
+   FOREIGN KEY (sceneId) REFERENCES usdScenes (id) ON DELETE CASCADE,
+   FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
+   UNIQUE(sceneId, userId)
 );
 
 -- Performances Table
@@ -50,7 +61,7 @@ CREATE TABLE IF NOT EXISTS performances (
 CREATE TABLE IF NOT EXISTS scenesPerformances (
     sceneId INTEGER NOT NULL,
     performanceId INTEGER NOT NULL,
-    FOREIGN KEY (sceneId) REFERENCES scenes (id),
+    FOREIGN KEY (sceneId) REFERENCES usdScenes (id),
     FOREIGN KEY (performanceId) REFERENCES performances (id),
     PRIMARY KEY (sceneId, performanceId)
 );
@@ -177,13 +188,23 @@ CREATE TABLE IF NOT EXISTS userAttendance (
 INSERT INTO users (name, email, eosId) VALUES
     ('Alice', 'alice@example.com', 'EOS123'),
     ('Bob', 'bob@example.com', 'EOS456'),
-    ('Charlie', 'charlie@example.com', 'EOS789');
+    ('Charlie', 'charlie@example.com', 'EOS789'),
+    ('Tom', 'tom@example.com', 'EOS789Tom');
 
-INSERT INTO scenes (title, owner, pCloudFileId, fileUrl) VALUES
-    ('Beach Scene', 1, 1001, 'https://example.com/chair.usd'),
-    ('City Scene', 2, 1002, 'https://example.com/chair.usd'),
-    ('Forest Scene', 3, 1003, 'https://example.com/chair.usd');
+INSERT INTO usdScenes (title, owner, pCloudFileId, fileUrl) VALUES
+    ('Beach Scene', 1, 1001, 'https://example.com/beach.usd'),
+    ('City Scene', 2, 1002, 'https://example.com/city.usd'),
+    ('Forest Scene', 3, 1003, 'https://example.com/forest.usd'),
+    ('Mountain Scene', 4, 1004, 'https://example.com/mountain.usd');
 
+INSERT INTO usdScene_Member (sceneId, userId)VALUES 
+    (1, 1),
+    (1, 2),
+    (2, 1),
+    (2, 3),
+    (3, 2),
+    (3, 4);
+    
 INSERT INTO performances (owner, title, description) VALUES
     (1, 'Othello', 'Shakespear wrote that'),
     (2, 'Interstellar', 'Interstellar description'),

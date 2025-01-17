@@ -18,7 +18,7 @@ export const typeDefs = gql`
   """
   A scene that can be linked to one or multiple performances.
   """
-  type Scene {
+  type USDSceneObject {
     id: ID
     pCloudFileId: Int
     fileUrl: String
@@ -31,14 +31,14 @@ export const typeDefs = gql`
   }
 
   """
-  A performance, which belongs to a user and can contain multiple scenes and avatars.
+  A performance, which belongs to a user and can contain multiple usdScenes and avatars.
   """
   type Performance {
     id: ID
     title: String
     description: String
     owner: User
-    scenes: [Scene]
+    usdScenes: [USDSceneObject]
     sessions: [Session]
     avatars: [Avatar]
   }
@@ -153,8 +153,8 @@ export const typeDefs = gql`
     userById(id: ID): User
 
     # Scenes
-    scenes: [Scene]
-    sceneById(id: ID): Scene
+    usdScenes: [USDSceneObject]
+    sceneById(id: ID): USDSceneObject
 
     # Performances
     performances: [Performance]
