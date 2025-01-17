@@ -20,9 +20,9 @@ DROP TABLE IF EXISTS props;
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    eosId TEXT NOT NULL DEFAULT '',
     name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    eosId TEXT NOT NULL
+    email TEXT UNIQUE NOT NULL
 );
 
 -- Scenes Table
@@ -143,7 +143,8 @@ CREATE TABLE IF NOT EXISTS sessionStates (
 -- Sessions Table
 CREATE TABLE IF NOT EXISTS sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
+    eosSessionId TEXT NOT NULL DEFAULT '',
+    title TEXT NOT NULL DEFAULT '',
     owner INTEGER NOT NULL,
     stateId INTEGER NOT NULL,
     performanceId INTEGER NOT NULL,

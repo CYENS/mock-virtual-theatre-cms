@@ -133,6 +133,7 @@ export const typeDefs = gql`
   """
   type Session {
     id: ID
+    eosSessionId: String
     title: String
     state: String
     owner: User
@@ -179,6 +180,7 @@ export const typeDefs = gql`
       ownerId: ID!
       performanceId: ID!
       state: String!
+      eosSessionId: String = ""
       motionDataId: ID
       faceDataId: ID
       lightDataId: ID
