@@ -39,6 +39,10 @@
             sceneById: async (_, { id }) => {
                 return getSingleRow("SELECT * FROM usdScenes WHERE id = ?", [id]);
             },
+            
+            xrLives: async () => {
+                return getAllRows("SELECT * FROM xrLives")
+            },
 
             // Performances
             performances: async () => {
@@ -196,6 +200,9 @@
                     parent.owner,
                 ]);
             },
+            xrLive: async (parent) => {
+                return  getSingleRow("SELECT * FROM xrLives WHERE id = ?", [parent.xrLiveId])
+            },
             usdScenes: async (parent) => {
                 const query = `
                   SELECT s.*
@@ -225,36 +232,36 @@
         },
 
         Avatar: {
-            user: async (parent) => {
-                return getSingleRow("SELECT * FROM users WHERE id = ?", [
-                    parent.userId,
-                ]);
-            },
-            performances: async (parent) => {
-                const query = `
-          SELECT p.*
-          FROM performances p
-          JOIN performanceCast pc ON pc.performanceId = p.id
-          WHERE pc.avatarId = ?
-        `;
-                return getAllRows(query, [parent.id]);
-            },
-            avatarMotionData: async (parent) => {
-                return getAllRows(
-                    "SELECT * FROM avatarMotionData WHERE avatarId = ?",
-                    [parent.id]
-                );
-            },
-            faceData: async (parent) => {
-                return getAllRows("SELECT * FROM faceData WHERE avatarId = ?", [
-                    parent.id,
-                ]);
-            },
-            audioData: async (parent) => {
-                return getAllRows("SELECT * FROM audioData WHERE avatarId = ?", [
-                    parent.id,
-                ]);
-            },
+        //     user: async (parent) => {
+        //         return getSingleRow("SELECT * FROM users WHERE id = ?", [
+        //             parent.userId,
+        //         ]);
+        //     },
+        //     performances: async (parent) => {
+        //         const query = `
+        //   SELECT p.*
+        //   FROM performances p
+        //   JOIN performanceCast pc ON pc.performanceId = p.id
+        //   WHERE pc.avatarId = ?
+        // `;
+        //         return getAllRows(query, [parent.id]);
+        //     },
+        //     avatarMotionData: async (parent) => {
+        //         return getAllRows(
+        //             "SELECT * FROM avatarMotionData WHERE avatarId = ?",
+        //             [parent.id]
+        //         );
+        //     },
+        //     faceData: async (parent) => {
+        //         return getAllRows("SELECT * FROM faceData WHERE avatarId = ?", [
+        //             parent.id,
+        //         ]);
+        //     },
+        //     audioData: async (parent) => {
+        //         return getAllRows("SELECT * FROM audioData WHERE avatarId = ?", [
+        //             parent.id,
+        //         ]);
+        //     },
         },
 
         Prop: {
@@ -313,29 +320,19 @@
                 ]);
             },
             motionData: async (parent) => {
-                return getSingleRow("SELECT * FROM avatarMotionData WHERE id = ?", [
-                    parent.motionData,
-                ]);
+                return getAllRows("SELECT * FROM avatarMotionData WHERE sessionId = ?", [parent.id])
             },
             faceData: async (parent) => {
-                return getSingleRow("SELECT * FROM faceData WHERE id = ?", [
-                    parent.faceData,
-                ]);
+                return getAllRows("SELECT * FROM faceData WHERE sessionId = ?", [parent.id])
             },
             lightData: async (parent) => {
-                return getSingleRow("SELECT * FROM lightData WHERE id = ?", [
-                    parent.lightData,
-                ]);
+                return getAllRows("SELECT * FROM lightData WHERE sessionId = ?", [parent.id])
             },
             audioData: async (parent) => {
-                return getSingleRow("SELECT * FROM audioData WHERE id = ?", [
-                    parent.audioData,
-                ]);
+                return getAllRows("SELECT * FROM audioData WHERE sessionId = ?", [parent.id])
             },
             propData: async (parent) => {
-                return getSingleRow("SELECT * FROM props WHERE id = ?", [
-                    parent.propData,
-                ]);
+                return getAllRows("SELECT * FROM propMotionData WHERE sessionId = ?", [parent.id])
             },
             attendees: async (parent) => {
                 const query = `

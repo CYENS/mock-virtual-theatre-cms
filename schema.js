@@ -30,17 +30,28 @@ export const typeDefs = gql`
     performances: [Performance]
   }
 
+  type USDAssetLibrary {
+    pCloudFileId: Int
+    assetLibraryJson: String
+  }
+
+  type XR_Live {
+    id: ID
+  }
+  
   """
   A performance, which belongs to a user and can contain multiple usdScenes and avatars.
   """
   type Performance {
     id: ID
     title: String
-    description: String
+    about: String
     owner: User
+    members: [User]
     usdScenes: [USDSceneObject]
     sessions: [Session]
     avatars: [Avatar]
+    xrLive: XR_Live
   }
 
   """
@@ -49,11 +60,6 @@ export const typeDefs = gql`
   type Avatar {
     id: ID
     name: String
-    user: User
-    performances: [Performance]
-    avatarMotionData: [AvatarMotionData]
-    faceData: [FaceData]
-    audioData: [AudioData]
   }
 
   """
@@ -61,6 +67,7 @@ export const typeDefs = gql`
   """
   type Prop {
     id: ID
+    session: Session
     name: String
     pCloudFileId: Int
     fileUrl: String
@@ -75,10 +82,15 @@ export const typeDefs = gql`
   """
   type PropMotionData {
     id: ID
+    session: Session
     pCloudFileId: Int
     fileUrl: String
-    initialPosition: String
-    initialRotation: String
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
     prop: Prop
   }
 
@@ -87,10 +99,15 @@ export const typeDefs = gql`
   """
   type AvatarMotionData {
     id: ID
+    session: Session
     pCloudFileId: Int
     fileUrl: String
-    initialPosition: String
-    initialRotation: String
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
     avatar: Avatar
   }
 
@@ -99,6 +116,7 @@ export const typeDefs = gql`
   """
   type FaceData {
     id: ID
+    session: Session
     pCloudFileId: Int
     fileUrl: String
     avatar: Avatar
@@ -109,6 +127,7 @@ export const typeDefs = gql`
   """
   type AudioData {
     id: ID
+    session: Session
     pCloudFileId: Int
     fileUrl: String
     avatar: Avatar
@@ -119,14 +138,21 @@ export const typeDefs = gql`
   """
   type LightData {
     id: ID
+    session: Session
     pCloudFileId: Int
     fileUrl: String
     lightId: Int
-    position: String
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
     lightType: String
     lightCharacteristicsJson: String
   }
-
+  
+  
   """
   A Session is a live/recorded session that references a user (owner),
   a performance, and various data IDs for motion, face, light, audio, and props.
@@ -138,13 +164,18 @@ export const typeDefs = gql`
     state: String
     owner: User
     performance: Performance
-    motionData: AvatarMotionData
-    faceData: FaceData
-    lightData: LightData
-    audioData: AudioData
-    propData: Prop
+    motionData: [AvatarMotionData]
+    faceData: [FaceData]
+    lightData: [LightData]
+    audioData: [AudioData]
+    propData: [Prop]
     streamingUrl: String
     attendees: [User]
+  }
+  
+  type SessionState {
+    id: ID
+    name: String
   }
 
   type Query {
@@ -156,6 +187,8 @@ export const typeDefs = gql`
     usdScenes: [USDSceneObject]
     sceneById(id: ID): USDSceneObject
 
+    xrLives: [XR_Live]
+    
     # Performances
     performances: [Performance]
     performanceById(id: ID): Performance

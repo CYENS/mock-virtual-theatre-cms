@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS performanceCast;
 DROP TABLE IF EXISTS avatars;
 DROP TABLE IF EXISTS scenesPerformances;
+DROP TABLE IF EXISTS xrLives;
 DROP TABLE IF EXISTS performances;
 DROP TABLE IF EXISTS usdScenes;
 DROP TABLE IF EXISTS users;
@@ -48,12 +49,18 @@ CREATE TABLE IF NOT EXISTS usdScene_Member (
    UNIQUE(sceneId, userId)
 );
 
--- Performances Table
+CREATE TABLE IF NOT EXISTS xrLives
+(
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+    
 CREATE TABLE IF NOT EXISTS performances (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    xrLiveId INTEGER default NULL,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     owner INTEGER NOT NULL,
+    FOREIGN KEY (xrLiveId) REFERENCES xrLives (id),
     FOREIGN KEY (owner) REFERENCES users (id)
 );
 
@@ -97,52 +104,62 @@ CREATE TABLE IF NOT EXISTS props (
 -- Prop Motion Data Table
 CREATE TABLE IF NOT EXISTS propMotionData (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessionId INTEGER DEFAULT NULL,
     pCloudFileId INTEGER NOT NULL,
     fileUrl TEXT NOT NULL,
     propId INTEGER NOT NULL,
     initialPosition TEXT NOT NULL,
     initialRotation TEXT NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id),
     FOREIGN KEY (propId) REFERENCES props (id)
 );
 
 -- Avatar Motion Data Table
 CREATE TABLE IF NOT EXISTS avatarMotionData (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessionId INTEGER DEFAULT NULL,
     pCloudFileId INTEGER NOT NULL,
     fileUrl TEXT NOT NULL,
     avatarId INTEGER NOT NULL,
     initialPosition TEXT NOT NULL,
     initialRotation TEXT NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id),
     FOREIGN KEY (avatarId) REFERENCES avatars (id)
 );
 
 -- Face Data Table
 CREATE TABLE IF NOT EXISTS faceData (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessionId INTEGER DEFAULT NULL,
     pCloudFileId INTEGER NOT NULL,
     fileUrl TEXT NOT NULL,
     avatarId INTEGER NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id),
     FOREIGN KEY (avatarId) REFERENCES avatars (id)
 );
 
 -- Audio Data Table
 CREATE TABLE IF NOT EXISTS audioData (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessionId INTEGER DEFAULT NULL,
     pCloudFileId INTEGER NOT NULL,
     fileUrl TEXT NOT NULL,
     avatarId INTEGER NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id),
     FOREIGN KEY (avatarId) REFERENCES avatars (id)
 );
 
 -- Light Data Table
 CREATE TABLE IF NOT EXISTS lightData (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessionId INTEGER DEFAULT NULL,
     pCloudFileId INTEGER NOT NULL,
     fileUrl TEXT NOT NULL,
     lightId INTEGER NOT NULL,
     position TEXT NOT NULL,
     lightType TEXT NOT NULL,
-    lightCharacteristicsJson TEXT NOT NULL
+    lightCharacteristicsJson TEXT NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id)
 );
 
 -- Session States
@@ -159,20 +176,10 @@ CREATE TABLE IF NOT EXISTS sessions (
     owner INTEGER NOT NULL,
     stateId INTEGER NOT NULL,
     performanceId INTEGER NOT NULL,
-    motionData INTEGER DEFAULT NULL,
-    faceData INTEGER DEFAULT NULL,
-    lightData INTEGER DEFAULT NULL,
-    audioData INTEGER DEFAULT NULL,
-    propData INTEGER DEFAULT NULL,
     streamingUrl TEXT DEFAULT NULL,
     FOREIGN KEY (owner) REFERENCES users (id),
     FOREIGN KEY (stateId) REFERENCES sessionStates (id) ON DELETE CASCADE,
-    FOREIGN KEY (performanceId) REFERENCES performances (id),
-    FOREIGN KEY (motionData) REFERENCES avatarMotionData (id),
-    FOREIGN KEY (faceData) REFERENCES faceData (id),
-    FOREIGN KEY (lightData) REFERENCES lightData (id),
-    FOREIGN KEY (audioData) REFERENCES audioData (id),
-    FOREIGN KEY (propData) REFERENCES props (id)
+    FOREIGN KEY (performanceId) REFERENCES performances (id)
 );
 
 -- User Attendance Table
@@ -204,11 +211,15 @@ INSERT INTO usdScene_Member (sceneId, userId)VALUES
     (2, 3),
     (3, 2),
     (3, 4);
-    
-INSERT INTO performances (owner, title, description) VALUES
-    (1, 'Othello', 'Shakespear wrote that'),
-    (2, 'Interstellar', 'Interstellar description'),
-    (3, 'Performance 3', 'Performance 3 description');
+
+INSERT INTO xrLives DEFAULT VALUES;
+INSERT INTO xrLives DEFAULT VALUES;
+INSERT INTO xrLives DEFAULT VALUES;
+
+INSERT INTO performances (owner, title, description, xrLiveId) VALUES
+    (1, 'Othello', 'Shakespear wrote that', 1),
+    (2, 'Interstellar', 'Interstellar description', 2),
+    (3, 'Performance 3', 'Performance 3 description', 3);
 
 INSERT INTO scenesPerformances (sceneId, performanceId) VALUES
     (1, 1),
@@ -229,25 +240,40 @@ INSERT INTO performanceCast (avatarId, performanceId) VALUES
 INSERT INTO props (name, pCloudFileId, fileUrl, position, rotation, scale) VALUES
     ('Chair', 2001, 'https://example.com/chair.usd', '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}', '{"x":1,"y":1,"z":1}');
 
-INSERT INTO propMotionData (pCloudFileId, fileUrl, propId, initialPosition, initialRotation) VALUES
-    (3001, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
+INSERT INTO propMotionData (sessionId, pCloudFileId, fileUrl, propId, initialPosition, initialRotation) VALUES
+    (1, 3001, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (2, 3002, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (3, 3003, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (4, 3004, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
 
-INSERT INTO avatarMotionData (pCloudFileId, fileUrl, avatarId, initialPosition, initialRotation) VALUES
-    (4001, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
+INSERT INTO avatarMotionData (sessionId, pCloudFileId, fileUrl, avatarId, initialPosition, initialRotation) VALUES
+    (1, 4001, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (2, 4002, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (3, 4003, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
+    (3, 4004, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
 
-INSERT INTO faceData (pCloudFileId, fileUrl, avatarId) VALUES
-    (5001, 'https://example.com/face.json', 1);
+INSERT INTO faceData (sessionId, pCloudFileId, fileUrl, avatarId) VALUES
+    (1, 5001, 'https://example.com/face.json', 1),
+    (2, 5002, 'https://example.com/face.json', 1),
+    (3, 5003, 'https://example.com/face.json', 1),
+    (3, 5004, 'https://example.com/face.json', 1);
 
-INSERT INTO audioData (pCloudFileId, fileUrl, avatarId) VALUES
-    (6001, 'https://example.com/audio.wav', 1);
+INSERT INTO audioData (sessionId, pCloudFileId, fileUrl, avatarId) VALUES
+    (1, 6001, 'https://example.com/audio.wav', 1),
+    (2, 6002, 'https://example.com/audio.wav', 1),
+    (3, 6003, 'https://example.com/audio.wav', 1),
+    (3, 6004, 'https://example.com/audio.wav', 1);
 
-INSERT INTO lightData (pCloudFileId, fileUrl, lightId, position, lightType, lightCharacteristicsJson) VALUES
-    (7001, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}');
+INSERT INTO lightData (sessionId, pCloudFileId, fileUrl, lightId, position, lightType, lightCharacteristicsJson) VALUES
+    (1, 7001, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (2, 7002, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (3, 7003, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (3, 7004, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}');
 
 INSERT INTO sessionStates (name) VALUES ('inactive'), ('active');
 
-INSERT INTO sessions (title, stateId, owner, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) VALUES
-    ('Morning Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
-    ('Midday Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
-    ('Night Session', 1, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1'),
-    ('Active Session', 2, 1, 1, 1, 1, 1, 1, 1, 'https://streaming.example.com/session1');
+INSERT INTO sessions (title, stateId, owner, performanceId, streamingUrl) VALUES
+    ('Morning Session', 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Midday Session', 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Night Session', 1, 1, 1, 'https://streaming.example.com/session1'),
+    ('Active Session', 2, 1, 1, 'https://streaming.example.com/session1');
