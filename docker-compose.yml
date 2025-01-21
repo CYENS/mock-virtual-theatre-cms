@@ -1,12 +1,12 @@
 ﻿services:
   # Node.js + GraphQL server
   app:
-    container_name: graphql-app
+    container_name: graphql-server
     build: .
     ports:
       - "4000:4000"  # Exposes GraphQL server on localhost:4000
     volumes:
-      - ./virtual_theatre.db:/usr/src/app/virtual_theatre.db
+      - ./virtual_theatre.db:/usr/src/server/virtual_theatre.db
     depends_on:
       - sqlite-web
 
@@ -22,3 +22,10 @@
     environment:
       # The name of the SQLite file inside the /data folder
       - SQLITE_DATABASE=virtual_theatre.db
+  
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token "${CLOUDFLARED_TOKEN}" 
+    depends_on:
+      - app
+      - sqlite-web

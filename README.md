@@ -17,5 +17,5 @@ docker compose up
 
 - **`docker-compose.yml`**: Runs the Node.js app + SQLite web viewer  
 - **`Dockerfile`**: Builds the Node.js app container  
-- **`index.js`** / **`schema.js`** / **`resolvers.js`**: Basic GraphQL setup  
+- **`server.js`** / **`schema.js`** / **`resolvers.js`**: Basic GraphQL setup  
 - **`virtual_theatre.db`**: SQLite DB (mounted locally)  

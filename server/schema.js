@@ -5,7 +5,7 @@ export const typeDefs = gql`
   Represents a user of the system.
   """
   type User {
-    id: ID!
+    id: ID
     name: String
     email: String
     eosId: String

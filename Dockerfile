@@ -1,7 +1,7 @@
 ﻿# Use Node 18 (LTS) or Node 20 as a base
 FROM node:18
 
-# Create app directory
+# Create server directory
 WORKDIR /usr/src/app
 
 # Copy package files and install dependencies
@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 4000
 
 # Launch the server
-CMD ["node", "index.js"]
+CMD ["node", "server/server.js"]
