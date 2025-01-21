@@ -5,7 +5,7 @@ export const typeDefs = gql`
   Represents a user of the system.
   """
   type User {
-    id: ID
+    id: ID!
     name: String
     email: String
     eosId: String
@@ -19,7 +19,7 @@ export const typeDefs = gql`
   A scene that can be linked to one or multiple performances.
   """
   type USDSceneObject {
-    id: ID
+    id: ID!
     pCloudFileId: Int
     fileUrl: String
     title: String
@@ -36,14 +36,14 @@ export const typeDefs = gql`
   }
 
   type XR_Live {
-    id: ID
+    id: ID!
   }
   
   """
   A performance, which belongs to a user and can contain multiple usdScenes and avatars.
   """
   type Performance {
-    id: ID
+    id: ID!
     title: String
     about: String
     owner: User
@@ -58,7 +58,7 @@ export const typeDefs = gql`
   An avatar belongs to exactly one user and can appear in multiple performances.
   """
   type Avatar {
-    id: ID
+    id: ID!
     name: String
   }
 
@@ -66,7 +66,7 @@ export const typeDefs = gql`
   A prop in the scene, with its own transform (position, rotation, scale).
   """
   type Prop {
-    id: ID
+    id: ID!
     session: Session
     name: String
     pCloudFileId: Int
@@ -81,7 +81,7 @@ export const typeDefs = gql`
   Motion data for a particular prop.
   """
   type PropMotionData {
-    id: ID
+    id: ID!
     session: Session
     pCloudFileId: Int
     fileUrl: String
@@ -98,7 +98,7 @@ export const typeDefs = gql`
   Motion data for a particular avatar.
   """
   type AvatarMotionData {
-    id: ID
+    id: ID!
     session: Session
     pCloudFileId: Int
     fileUrl: String
@@ -115,7 +115,7 @@ export const typeDefs = gql`
   Face data for a particular avatar.
   """
   type FaceData {
-    id: ID
+    id: ID!
     session: Session
     pCloudFileId: Int
     fileUrl: String
@@ -126,7 +126,7 @@ export const typeDefs = gql`
   Audio data for a particular avatar.
   """
   type AudioData {
-    id: ID
+    id: ID!
     session: Session
     pCloudFileId: Int
     fileUrl: String
@@ -137,7 +137,7 @@ export const typeDefs = gql`
   Light data for a scene, containing position, type, and other light characteristics.
   """
   type LightData {
-    id: ID
+    id: ID!
     session: Session
     pCloudFileId: Int
     fileUrl: String
@@ -158,7 +158,7 @@ export const typeDefs = gql`
   a performance, and various data IDs for motion, face, light, audio, and props.
   """
   type Session {
-    id: ID
+    id: ID!
     eosSessionId: String
     title: String
     state: String
@@ -174,7 +174,7 @@ export const typeDefs = gql`
   }
   
   type SessionState {
-    id: ID
+    id: ID!
     name: String
   }
 
