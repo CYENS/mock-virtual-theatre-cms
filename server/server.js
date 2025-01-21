@@ -4,7 +4,7 @@ import sqlite3 from 'sqlite3';
 import { typeDefs } from './schema.js';
 import { createResolvers } from './resolvers.js';
 
-const db = new sqlite3.Database('../virtual_theatre.db', (err) => {
+const db = new sqlite3.Database('./virtual_theatre.db', (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     } else {

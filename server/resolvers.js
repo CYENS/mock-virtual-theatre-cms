@@ -90,11 +90,6 @@
                     performanceId,
                     state = "inactive",
                     eosSessionId = "",
-                    motionDataId = null,
-                    faceDataId = null,
-                    lightDataId = null,
-                    audioDataId = null,
-                    propDataId = null,
                     streamingUrl = null,
                 } = args;
 
@@ -102,8 +97,8 @@
                 return new Promise((resolve, reject) => {
                     const query = `
                         INSERT INTO sessions 
-                        (eosSessionId, title, owner, stateId, performanceId, motionData, faceData, lightData, audioData, propData, streamingUrl) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        (eosSessionId, title, owner, stateId, performanceId, streamingUrl) 
+                        VALUES (?, ?, ?, ?, ?, ?);
                     `;
                     const params = [
                         eosSessionId,
@@ -111,11 +106,6 @@
                         ownerId,
                         stateId,
                         performanceId,
-                        motionDataId,
-                        faceDataId,
-                        lightDataId,
-                        audioDataId,
-                        propDataId,
                         streamingUrl,
                     ];
 
