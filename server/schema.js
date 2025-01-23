@@ -4,15 +4,36 @@ export const typeDefs = gql`
   """
   Represents a user of the system.
   """
+  
+  scalar DateTime
+  
   type User {
-    id: ID
+    id: ID!
     name: String
     email: String
     eosId: String
+    userRole: String
+    isAdmin: Boolean
+    isSuperAdmin: Boolean
+    createdAt: DateTime
     performances: [Performance]
     avatars: [Avatar]
     sessionsOwned: [Session]
     sessionsAttending: [Session]
+  }
+  
+  """
+  input used for creating a user
+  """
+  input UserCreateInput {
+    eosId: String
+    name: String
+    email: String
+    password: String
+    userRole: String
+    isAdmin: Boolean
+    isSuperAdmin: Boolean
+    createdAt: DateTime
   }
 
   """
@@ -152,7 +173,7 @@ export const typeDefs = gql`
     lightCharacteristicsJson: String
   }
   
-  
+
   """
   A Session is a live/recorded session that references a user (owner),
   a performance, and various data IDs for motion, face, light, audio, and props.
@@ -177,6 +198,7 @@ export const typeDefs = gql`
     id: ID!
     name: String
   }
+  
 
   type Query {
     # Users
@@ -221,5 +243,7 @@ export const typeDefs = gql`
       propDataId: ID
       streamingUrl: String
     ): Session
+    
+    createUser(data: UserCreateInput!): User
   }
 `;

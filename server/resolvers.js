@@ -128,6 +128,52 @@
                     });
                 });
             },
+            createUser: async (_, args, { dataSources }) => {
+                const {
+                    eosId = "",
+                    name,
+                    email,
+                    password,
+                    userRole,
+                    isAdmin = false,
+                    isSuperAdmin = false,
+                    createdAt
+                } = args.data;
+                
+                return new Promise((resolve, reject) => {
+                    const params = [
+                        eosId,
+                        name,
+                        email,
+                        userRole,
+                        isAdmin,
+                        isSuperAdmin,
+                    ];
+                    
+                    const query = `
+                        INSERT INTO users (eosId, name, email, userRole, isAdmin, isSuperAdmin) VALUES (?, ?, ?, ?, ?, ?)
+                    `;
+                    
+                    db.run(query, params, function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        
+                        // Retrieve the newly created session using the last inserted ID
+                        db.get(
+                            "SELECT * FROM users WHERE id = ?",
+                            [this.lastID],
+                            (err, newSession) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                resolve(newSession);
+                            }
+                        );
+                    })
+                    
+                });
+            }
         },
 
         // Field resolvers
