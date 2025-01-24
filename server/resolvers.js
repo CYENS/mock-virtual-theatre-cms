@@ -89,7 +89,7 @@
                     ownerId,
                     performanceId,
                     state = "inactive",
-                    eosSessionId = "",
+                    eosSessionId = null,
                     streamingUrl = null,
                 } = args;
 
