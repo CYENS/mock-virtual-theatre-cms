@@ -182,11 +182,11 @@ CREATE TABLE IF NOT EXISTS sessions (
     eosSessionId TEXT UNIQUE DEFAULT NULL,
     xrLiveId INTEGER DEFAULT NULL,
     title TEXT NOT NULL DEFAULT '',
-    owner INTEGER NOT NULL,
+    ownerId INTEGER NOT NULL,
     sessionStateId INTEGER NOT NULL,
     performanceId INTEGER NOT NULL,
     streamingUrl TEXT DEFAULT NULL,
-    FOREIGN KEY (owner) REFERENCES users (id),
+    FOREIGN KEY (ownerId) REFERENCES users (id),
     FOREIGN KEY (sessionStateId) REFERENCES sessionStates (id) ON DELETE CASCADE,
     FOREIGN KEY (performanceId) REFERENCES performances (id),
     FOREIGN KEY (xrLiveId) REFERENCES xrLives (id)
@@ -207,6 +207,14 @@ INSERT INTO users (name, email, eosId) VALUES
     ('Bob', 'bob@example.com', 'EOS456'),
     ('Charlie', 'charlie@example.com', 'EOS789'),
     ('Tom', 'tom@example.com', 'EOS789Tom');
+
+INSERT INTO userAttendance (userId, sessionId) VALUES
+    (1, 1),
+    (2, 1),
+    (3, 1),
+    (1, 2),
+    (2, 2),
+    (1, 3);
 
 INSERT INTO usdScenes (title, ownerId, pCloudFileId, fileUrl)VALUES
     ('Beach Scene', 1, 1001, 'https://example.com/beach.usd'),
@@ -295,8 +303,8 @@ INSERT INTO lightData (sessionId, pCloudFileId, fileUrl, lightId, position, ligh
 
 INSERT INTO sessionStates (name) VALUES ('inactive'), ('active');
 
-INSERT INTO sessions (title, sessionStateId, owner, performanceId, streamingUrl, xrLiveId)VALUES
+INSERT INTO sessions (title, sessionStateId, ownerId, performanceId, streamingUrl, xrLiveId)VALUES
     ('Morning Session', 1, 1, 1, 'https://streaming.example.com/session1', 1),
     ('Midday Session', 1, 1, 1, 'https://streaming.example.com/session1', 1),
-    ('Night Session', 1, 1, 1, 'https://streaming.example.com/session1', 2),
-    ('Active Session', 2, 1, 1, 'https://streaming.example.com/session1', 2);
+    ('Night Session', 1, 2, 1, 'https://streaming.example.com/session1', 2),
+    ('Active Session', 2, 3, 1, 'https://streaming.example.com/session1', 2);

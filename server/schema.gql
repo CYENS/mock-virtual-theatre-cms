@@ -1,0 +1,248 @@
+﻿  """
+  Represents a user of the system.
+  """
+  
+  scalar DateTime
+  
+  """
+  Motion data for a particular avatar.
+  """
+  type AvatarMotionData {
+    id: ID!
+    session: Session
+    pCloudFileId: Int
+    fileUrl: String
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
+    avatar: Avatar
+  }
+
+  """
+  Light data for a scene, containing position, type, and other light characteristics.
+  """
+  type LightData {
+    id: ID!
+    session: Session
+    pCloudFileId: Int
+    fileUrl: String
+    lightId: Int
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
+    lightType: String
+    lightCharacteristicsJson: String
+  }
+
+  """
+  Face data for a particular avatar.
+  """
+  type FaceData {
+    id: ID!
+    session: Session
+    pCloudFileId: Int
+    fileUrl: String
+    avatar: Avatar
+  }
+  
+  """
+  Audio data for a particular avatar.
+  """
+  type AudioData {
+    id: ID!
+    session: Session
+    pCloudFileId: Int
+    fileUrl: String
+    avatar: Avatar
+  }
+
+
+  """
+  The prop motion in the scene, with its initial transform (position, rotation, scale).
+  """
+  type PropMotionData {
+    id: ID!
+    pCloudFileId: Int
+    fileUrl: String
+    session: Session
+    initialPosition: String
+    initialRotation: String
+  }
+
+
+  """
+  A Session is a live/recorded session that references a user (owner),
+  a performance, and various data IDs for motion, face, light, audio, and propMotionData.
+  """
+  type Session {
+    id: ID!
+    eosSessionId: String
+    title: String
+    state: String
+    owner: User
+    performance: Performance
+    motionData: [AvatarMotionData]
+    faceData: [FaceData]
+    lightData: [LightData]
+    audioData: [AudioData]
+    propMotionData: [PropMotionData]
+    streamingUrl: String
+    attendees: [User]
+  }
+
+  type User {
+    id: ID!
+    name: String
+    email: String
+    eosId: String
+    userRole: String
+    isAdmin: Boolean
+    isSuperAdmin: Boolean
+    createdAt: DateTime
+    performances: [Performance]
+    avatars: [Avatar]
+    sessionsOwned: [Session]
+    sessionsAttending: [Session]
+  }
+
+  type UserAttendance {
+    user: User
+    session: Session
+  }
+  
+  """
+  input used for creating a user
+  """
+  input UserCreateInput {
+    eosId: ID
+    name: String
+    email: String
+    password: String
+    userRole: String
+    isAdmin: Boolean
+    isSuperAdmin: Boolean
+    createdAt: DateTime
+  }
+  
+  
+  """
+  input used for querying user
+  """
+  input UserWhereUniqueInput {
+    id: ID
+    eosId: ID
+    email: String
+  }
+  
+  """
+  A scene that can be linked to one or multiple performances.
+  """
+  type USDScene {
+    id: ID!
+    pCloudFileId: Int
+    fileUrl: String
+    title: String
+    owner: User
+    members: [User]
+    template: Boolean
+    public: Boolean
+    performances: [Performance]
+  }
+
+  type USDAssetLibrary {
+    id: ID!
+    pCloudFileId: Int
+    assetLibraryJson: String
+  }
+
+  type XR_Live {
+    id: ID!
+  }
+  
+  """
+  A performance, which belongs to a user and can contain multiple usdScenes and avatars.
+  """
+  type Performance {
+    id: ID!
+    title: String
+    about: String
+    owner: User
+    members: [User]
+    usdScenes: [USDScene]
+    sessions: [Session]
+    avatars: [Avatar]
+  }
+
+  """
+  An avatar belongs to exactly one user and can appear in multiple performances.
+  """
+  type Avatar {
+    id: ID!
+    name: String
+  }
+
+  type SessionState {
+    id: ID!
+    name: String
+  }
+  
+
+  type Query {
+    # Users
+    users: [User]
+    userById(id: ID): User
+    user(where: UserWhereUniqueInput!): User
+    
+    userAttendances: [UserAttendance]
+
+    # Scenes
+    usdScenes: [USDScene]
+    sceneById(id: ID): USDScene
+    
+    usdAssetLibraries: [USDAssetLibrary]
+
+    xrLives: [XR_Live]
+    
+    # Performances
+    performances: [Performance]
+    performanceById(id: ID): Performance
+
+    # Avatars
+    avatars: [Avatar]
+    avatarById(id: ID): Avatar
+
+    # Sessions
+    sessions: [Session]
+    sessionById(id: ID): Session
+    sessionByState(state: String): [Session]
+    
+    avatarMotionData: [AvatarMotionData]
+    faceData: [FaceData]
+    lightData: [LightData]
+    audioData: [AudioData]
+    propMotionData: [PropMotionData]
+  }
+  
+  type Mutation {
+    createSession(
+      title: String!
+      ownerId: ID!
+      performanceId: ID!
+      state: String!
+      eosSessionId: String = ""
+      motionDataId: ID
+      faceDataId: ID
+      lightDataId: ID
+      audioDataId: ID
+      propDataId: ID
+      streamingUrl: String
+    ): Session
+    
+    createUser(data: UserCreateInput!): User
+  }
