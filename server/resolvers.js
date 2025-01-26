@@ -31,6 +31,23 @@
             userById: async (_, { id }) => {
                 return getSingleRow("SELECT * FROM users WHERE id = ?", [id]);
             },
+            user: async (_, { id = null, eosId = null, email = null }) => {
+                const query = `
+                  SELECT *
+                  FROM users
+                  WHERE ($idValue IS NULL OR id = $idValue)
+                    AND ($eosIdValue IS NULL OR eosId = $eosIdValue)
+                    AND ($emailValue IS NULL OR email = $emailValue)
+                `;
+
+                // Note: The keys ($idValue, $eosIdValue, $emailValue) must match the placeholders in the query.
+                const params = {
+                    $idValue: id,
+                    $eosIdValue: eosId,
+                    $emailValue: email,
+                };
+                return getSingleRow(query, params);
+            },
 
             // Scenes
             usdScenes: async () => {

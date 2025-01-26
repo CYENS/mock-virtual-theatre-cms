@@ -26,7 +26,7 @@ export const typeDefs = gql`
   input used for creating a user
   """
   input UserCreateInput {
-    eosId: String
+    eosId: ID
     name: String
     email: String
     password: String
@@ -35,7 +35,17 @@ export const typeDefs = gql`
     isSuperAdmin: Boolean
     createdAt: DateTime
   }
-
+  
+  
+  """
+  input used for querying user
+  """
+  input UserWhereUniqueInput {
+    id: ID
+    eosId: ID
+    email: String
+  }
+  
   """
   A scene that can be linked to one or multiple performances.
   """
@@ -204,6 +214,7 @@ export const typeDefs = gql`
     # Users
     users: [User]
     userById(id: ID): User
+    user(where: UserWhereUniqueInput!): User
 
     # Scenes
     usdScenes: [USDSceneObject]
