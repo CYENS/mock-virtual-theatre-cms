@@ -212,6 +212,8 @@
   }
 
   type Query {
+    persons: [Person]
+    
     # Users
     users: [User]
     userById(id: ID): User

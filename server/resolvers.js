@@ -24,6 +24,9 @@
 
     return {
         Query: {
+            persons: async (parent) => {
+                return getAllRows("SELECT * FROM people");
+            },
             // Users
             users: async () => {
                 return getAllRows("SELECT * FROM users");
@@ -280,6 +283,9 @@
 
         // Field resolvers
         User: {
+            person: async (parent) => {
+                return getSingleRow("SELECT * FROM people WHERE id = ?", [parent.personId]);
+            },
             performances: async (parent) => {
                 return getAllRows("SELECT * FROM performances WHERE ownerId = ?", [
                     parent.id,

@@ -1,4 +1,5 @@
 ﻿-- Drop existing tables if they exist
+DROP TABLE IF EXISTS people;
 DROP TABLE IF EXISTS userAttendance;
 DROP TABLE IF EXISTS sessionStates;
 DROP TABLE IF EXISTS sessions;
