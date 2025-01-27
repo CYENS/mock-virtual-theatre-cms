@@ -261,4 +261,20 @@
     ): Session
     
     createUser(data: UserCreateInput!): User
+    
+    """
+    Create a new session state entry
+    """
+    createSessionState(name: String!): SessionState
+
+    """
+    Update an existing session state by ID
+    """
+    updateSessionState(id: ID!, name: String!): SessionState
+
+    """
+    Delete an existing session state by ID
+    Returns true if a row was deleted
+    """
+    deleteSessionState(id: ID!): Boolean
   }

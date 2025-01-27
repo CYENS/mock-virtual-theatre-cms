@@ -211,7 +211,71 @@
                     })
                     
                 });
-            }
+            },
+
+            createSessionState: async (_, { name }) => {
+                return new Promise((resolve, reject) => {
+                    const query = `
+                      INSERT INTO sessionStates (name)
+                      VALUES (?);
+                    `;
+                    db.run(query, [name], function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        db.get(
+                            "SELECT * FROM sessionStates WHERE id = ?",
+                            [this.lastID],
+                            (err, createdRow) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                resolve(createdRow);
+                            }
+                        );
+                    });
+                });
+            },
+            updateSessionState: async (_, { id, name }) => {
+                return new Promise((resolve, reject) => {
+                    const query = `
+                      UPDATE sessionStates
+                      SET name = ?
+                      WHERE id = ?;
+                    `;
+                    db.run(query, [name, id], function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        db.get(
+                            "SELECT * FROM sessionStates WHERE id = ?",
+                            [id],
+                            (err, updatedRow) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                resolve(updatedRow);
+                            }
+                        );
+                    });
+                });
+            },
+            deleteSessionState: async (_, { id }) => {
+                return new Promise((resolve, reject) => {
+                    const query = `
+                      DELETE FROM sessionStates
+                      WHERE id = ?;
+                    `;
+                    db.run(query, [id], function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        // If this.changes > 0, a row was actually deleted
+                        resolve(this.changes > 0);
+                    });
+                });
+            },
+
         },
 
         // Field resolvers
@@ -420,7 +484,8 @@
                   FROM sessionCasts sc WHERE sessionId = ?
                 `;
                 return getAllRows(query, [parent.id]);
-            }
+            },
+
         },
     };
 }

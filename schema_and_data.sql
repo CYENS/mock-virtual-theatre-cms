@@ -204,11 +204,11 @@ CREATE TABLE IF NOT EXISTS sessions (
     xrLiveId INTEGER DEFAULT NULL,
     title TEXT NOT NULL DEFAULT '',
     ownerId INTEGER NOT NULL,
-    sessionStateId INTEGER NOT NULL,
+    sessionStateId INTEGER DEFAULT NULL,
     performanceId INTEGER NOT NULL,
     streamingUrl TEXT DEFAULT NULL,
     FOREIGN KEY (ownerId) REFERENCES users (id),
-    FOREIGN KEY (sessionStateId) REFERENCES sessionStates (id) ON DELETE CASCADE,
+    FOREIGN KEY (sessionStateId) REFERENCES sessionStates (id) ON DELETE SET NULL,
     FOREIGN KEY (performanceId) REFERENCES performances (id),
     FOREIGN KEY (xrLiveId) REFERENCES xrLives (id)
 );
