@@ -388,9 +388,7 @@
                 return row.name;
             },
             performance: async (parent) => {
-                return getSingleRow("SELECT * FROM performances WHERE id = ?", [
-                    parent.performanceId,
-                ]);
+                return getSingleRow("SELECT * FROM performances WHERE id = ?", [parent.performanceId]);
             },
             motionData: async (parent) => {
                 return getAllRows("SELECT * FROM avatarMotionData WHERE sessionId = ?", [parent.id])
@@ -416,6 +414,13 @@
                 `;
                 return getAllRows(query, [parent.id]);
             },
+            castAvatars : async (parent) => {
+                const query = `
+                  SELECT sc.*
+                  FROM sessionCasts sc WHERE sessionId = ?
+                `;
+                return getAllRows(query, [parent.id]);
+            }
         },
     };
 }

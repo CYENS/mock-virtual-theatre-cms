@@ -94,6 +94,7 @@
     propMotionData: [PropMotionData]
     streamingUrl: String
     attendees: [User]
+    castAvatars: [SessionCast]
   }
 
   type Person {
