@@ -65,6 +65,10 @@
                 return getAllRows("SELECT * FROM usdAssetLibrary")
             },
             
+            sessionCasts: async () => {
+                return getAllRows("SELECT * FROM sessionCasts")
+            },
+            
             xrLives: async () => {
                 return getAllRows("SELECT * FROM xrLives")
             },
@@ -318,6 +322,20 @@
         },
 
         Avatar: {
+        },
+        
+        SessionCast: {
+            session: async (parent) => {
+                return getSingleRow("SELECT * FROM sessions WHERE id = ?", [parent.sessionId]);
+            },
+            
+            user: async (parent) => {   
+                return getSingleRow("SELECT * FROM users WHERE id = ?", [parent.userId]);
+            },
+            
+            avatar: async (parent) => {
+                return getSingleRow("SELECT * FROM avatars WHERE id = ?", [parent.avatarId]);
+            },
         },
 
         AvatarMotionData: {

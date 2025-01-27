@@ -96,6 +96,13 @@
     attendees: [User]
   }
 
+  type Person {
+    id: ID!   
+    givenName: String
+    familyName: String
+    artisticName: String
+  }
+  
   type User {
     id: ID!
     name: String
@@ -105,6 +112,7 @@
     isAdmin: Boolean
     isSuperAdmin: Boolean
     createdAt: DateTime
+    person: Person
     performances: [Performance]
     avatars: [Avatar]
     sessionsOwned: [Session]
@@ -178,7 +186,7 @@
     sessions: [Session]
     avatars: [Avatar]
   }
-
+  
   """
   An avatar belongs to exactly one user and can appear in multiple performances.
   """
@@ -191,7 +199,12 @@
     id: ID!
     name: String
   }
-  
+
+  type SessionCast {
+    session: Session
+    user: User
+    avatar: Avatar
+  }
 
   type Query {
     # Users
@@ -221,6 +234,8 @@
     sessions: [Session]
     sessionById(id: ID): Session
     sessionByState(state: String): [Session]
+    
+    sessionCasts: [SessionCast]
     
     avatarMotionData: [AvatarMotionData]
     faceData: [FaceData]

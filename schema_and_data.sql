@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS userAttendance;
 DROP TABLE IF EXISTS sessionStates;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS avatars;
+DROP TABLE IF EXISTS sessionCasts;
 DROP TABLE IF EXISTS scenesPerformances;
 DROP TABLE IF EXISTS xrLives;
 DROP TABLE IF EXISTS performances;
@@ -21,6 +22,14 @@ DROP TABLE IF EXISTS lightData;
 
 -- Create Tables
 
+CREATE TABLE IF NOT EXISTS people
+(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    givenName TEXT NOT NULL DEFAULT '',
+    familyName TEXT NOT NULL DEFAULT '',
+    artisticName TEXT NOT NULL DEFAULT ''
+);
+
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +39,9 @@ CREATE TABLE IF NOT EXISTS users (
     userRole TEXT NOT NULL DEFAULT 'Read',
     isAdmin INTEGER NOT NULL DEFAULT 0,
     isSuperAdmin INTEGER NOT NULL DEFAULT 0,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    personId INTEGER DEFAULT NULL,
+    FOREIGN KEY (personId) REFERENCES people
 );
 
 CREATE TABLE IF NOT EXISTS usdAssetLibrary (
@@ -96,6 +107,17 @@ CREATE TABLE IF NOT EXISTS avatars (
     name TEXT NOT NULL,
     userId INTEGER NOT NULL,
     FOREIGN KEY (userId) REFERENCES users (id)
+);
+
+-- Represents the association of a user to an avatar in a session
+CREATE TABLE IF NOT EXISTS sessionCasts (
+    sessionId INTEGER NOT NULL,
+    userId INTEGER NOT NULL,
+    avatarId INTEGER NOT NULL,
+    FOREIGN KEY (sessionId) REFERENCES sessions (id),
+    FOREIGN KEY (userId) REFERENCES users (id),
+    FOREIGN KEY (avatarId) REFERENCES avatars (id),
+    PRIMARY KEY (sessionId, userId, avatarId)
 );
 
 -- Represents the avatars that the performance will have
@@ -175,7 +197,7 @@ CREATE TABLE IF NOT EXISTS sessionStates (
     name TEXT NOT NULL UNIQUE
 );
 
--- Sessions Table
+-- Sessions Table. Represents an instantiation of a performance.
 CREATE TABLE IF NOT EXISTS sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eosSessionId TEXT UNIQUE DEFAULT NULL,
@@ -201,11 +223,16 @@ CREATE TABLE IF NOT EXISTS userAttendance (
 );
 
 -- Insert Mock Data
-INSERT INTO users (name, email, eosId) VALUES
-    ('Alice', 'alice@example.com', 'EOS123'),
-    ('Bob', 'bob@example.com', 'EOS456'),
-    ('Charlie', 'charlie@example.com', 'EOS789'),
-    ('Tom', 'tom@example.com', 'EOS789Tom');
+INSERT INTO people (givenName, familyName, artisticName)  VALUES
+    ('Alice', 'Cooper', 'AliCooper'),
+    ('Bob', 'Dylan', 'Dylan'),
+    ('Charlie', 'Sheen', 'Sheen');
+    
+INSERT INTO users (name, email, eosId, personId) VALUES
+    ('Alice', 'alice@example.com', 'EOS123', 1),
+    ('Bob', 'bob@example.com', 'EOS456', 2),
+    ('Charlie', 'charlie@example.com', 'EOS789', 3),
+    ('Tom', 'tom@example.com', 'EOS789Tom', NULL);
 
 INSERT INTO userAttendance (userId, sessionId) VALUES
     (1, 1),
@@ -272,6 +299,13 @@ INSERT INTO avatars (name, userId) VALUES
     ('Avatar1', 1),
     ('Avatar2', 2),
     ('Avatar3', 3);
+
+INSERT INTO sessionCasts (sessionId, userId, avatarId)  VALUES
+    (1, 1, 1),
+    (1, 2, 2),
+    (1, 3, 3),
+    (2, 1, 1),
+    (2, 2, 2);
 
 INSERT INTO propMotionData (sessionId, pCloudFileId, fileUrl, propId, initialPosition, initialRotation) VALUES
     (1, 3001, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
