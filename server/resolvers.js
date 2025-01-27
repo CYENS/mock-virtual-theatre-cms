@@ -291,11 +291,9 @@
                 ]);
             },
             sessionsOwned: async (parent) => {
-                return getAllRows("SELECT * FROM sessions WHERE ownerId = ?", [
-                    parent.id,
-                ]);
+                return getAllRows("SELECT * FROM sessions WHERE ownerId = ?", [parent.id]);
             },
-            sessionsAttending: async (parent) => {
+            sessionAttendance: async (parent) => {
                 const query = `
                   SELECT s.*
                   FROM sessions s

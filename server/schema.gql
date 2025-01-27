@@ -121,7 +121,7 @@
     performances: [Performance]
     avatars: [Avatar]
     sessionsOwned: [Session]
-    sessionsAttending: [Session]
+    sessionAttendance: [Session]
   }
 
   type UserAttendance {
