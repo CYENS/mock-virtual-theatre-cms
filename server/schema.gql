@@ -71,8 +71,12 @@
     pCloudFileId: Int
     fileUrl: String
     session: Session
-    initialPosition: String
-    initialRotation: String
+    initialPositionX: Float
+    initialPositionY: Float
+    initialPositionZ: Float
+    initialRotationX: Float
+    initialRotationY: Float
+    initialRotationZ: Float
   }
 
 

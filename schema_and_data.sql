@@ -136,8 +136,12 @@ CREATE TABLE IF NOT EXISTS propMotionData (
     fileUrl TEXT NOT NULL,
     sessionId INTEGER DEFAULT NULL,
     propId INTEGER NOT NULL,
-    initialPosition TEXT NOT NULL,
-    initialRotation TEXT NOT NULL,
+    initialPositionX REAL NOT NULL DEFAULT 0,
+    initialPositionY REAL NOT NULL DEFAULT 0,
+    initialPositionZ REAL NOT NULL DEFAULT 0,
+    initialRotationX REAL NOT NULL DEFAULT 0,
+    initialRotationY REAL NOT NULL DEFAULT 0,
+    initialRotationZ REAL NOT NULL DEFAULT 0,
     FOREIGN KEY (sessionId) REFERENCES sessions (id)
 );
 
@@ -148,8 +152,12 @@ CREATE TABLE IF NOT EXISTS avatarMotionData (
     fileUrl TEXT NOT NULL,
     sessionId INTEGER DEFAULT NULL,
     avatarId INTEGER NOT NULL,
-    initialPosition TEXT NOT NULL,
-    initialRotation TEXT NOT NULL,
+    initialPositionX REAL NOT NULL DEFAULT 0,
+    initialPositionY REAL NOT NULL DEFAULT 0,
+    initialPositionZ REAL NOT NULL DEFAULT 0,
+    initialRotationX REAL NOT NULL DEFAULT 0,
+    initialRotationY REAL NOT NULL DEFAULT 0,
+    initialRotationZ REAL NOT NULL DEFAULT 0,
     FOREIGN KEY (sessionId) REFERENCES sessions (id),
     FOREIGN KEY (avatarId) REFERENCES avatars (id)
 );
@@ -183,9 +191,12 @@ CREATE TABLE IF NOT EXISTS lightData (
     fileUrl TEXT NOT NULL,
     sessionId INTEGER DEFAULT NULL,
     lightId INTEGER NOT NULL,
-    position TEXT NOT NULL,
-    initialPosition TEXT NOT NULL,
-    initialRotation TEXT NOT NULL,
+    initialPositionX REAL NOT NULL DEFAULT 0,
+    initialPositionY REAL NOT NULL DEFAULT 0,
+    initialPositionZ REAL NOT NULL DEFAULT 0,
+    initialRotationX REAL NOT NULL DEFAULT 0,
+    initialRotationY REAL NOT NULL DEFAULT 0,
+    initialRotationZ REAL NOT NULL DEFAULT 0,
     lightType TEXT NOT NULL,
     lightCharacteristicsJson TEXT NOT NULL,
     FOREIGN KEY (sessionId) REFERENCES sessions (id)
@@ -307,17 +318,17 @@ INSERT INTO sessionCasts (sessionId, userId, avatarId)  VALUES
     (2, 1, 1),
     (2, 2, 2);
 
-INSERT INTO propMotionData (sessionId, pCloudFileId, fileUrl, propId, initialPosition, initialRotation) VALUES
-    (1, 3001, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (2, 3002, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (3, 3003, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (4, 3004, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
+INSERT INTO propMotionData (sessionId, pCloudFileId, fileUrl, propId) VALUES
+    (1, 3001, 'https://example.com/prop_motion.bvh', 1),
+    (2, 3002, 'https://example.com/prop_motion.bvh', 1),
+    (3, 3003, 'https://example.com/prop_motion.bvh', 1),
+    (4, 3004, 'https://example.com/prop_motion.bvh', 1);
 
-INSERT INTO avatarMotionData (sessionId, pCloudFileId, fileUrl, avatarId, initialPosition, initialRotation) VALUES
-    (1, 4001, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (2, 4002, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (3, 4003, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
-    (3, 4004, 'https://example.com/avatar_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}');
+INSERT INTO avatarMotionData (sessionId, pCloudFileId, fileUrl, avatarId) VALUES
+    (1, 4001, 'https://example.com/avatar_motion.bvh', 1),
+    (2, 4002, 'https://example.com/avatar_motion.bvh', 1),
+    (3, 4003, 'https://example.com/avatar_motion.bvh', 1),
+    (3, 4004, 'https://example.com/avatar_motion.bvh', 1);
 
 INSERT INTO faceData (sessionId, pCloudFileId, fileUrl, avatarId) VALUES
     (1, 5001, 'https://example.com/face.json', 1),
@@ -331,11 +342,11 @@ INSERT INTO audioData (sessionId, pCloudFileId, fileUrl, avatarId) VALUES
     (3, 6003, 'https://example.com/audio.wav', 1),
     (3, 6004, 'https://example.com/audio.wav', 1);
 
-INSERT INTO lightData (sessionId, pCloudFileId, fileUrl, lightId, position, lightType, lightCharacteristicsJson, initialPosition, initialRotation) VALUES
-    (1, 7001, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}', '',''),
-    (2, 7002, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}', '', ''),
-    (3, 7003, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}', '', ''),
-    (3, 7004, 'https://example.com/light.json', 1, '{"x":0,"y":10,"z":0}', 'Spotlight', '{"intensity":100,"color":"#ffffff"}', '', '');
+INSERT INTO lightData (sessionId, pCloudFileId, fileUrl, lightId, lightType, lightCharacteristicsJson) VALUES
+    (1, 7001, 'https://example.com/light.json', 1, 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (2, 7002, 'https://example.com/light.json', 1, 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (3, 7003, 'https://example.com/light.json', 1, 'Spotlight', '{"intensity":100,"color":"#ffffff"}'),
+    (3, 7004, 'https://example.com/light.json', 1, 'Spotlight', '{"intensity":100,"color":"#ffffff"}');
 
 INSERT INTO sessionStates (name) VALUES ('inactive'), ('active');
 
