@@ -302,8 +302,8 @@
                 const query = `
                   SELECT a.*
                   FROM avatars a
-                  JOIN performanceCast pc ON pc.avatarId = a.id
-                  WHERE pc.performanceId = ?
+                  JOIN performanceAvatars pa ON pa.avatarId = a.id
+                  WHERE pa.performanceId = ?
                 `;
                 return getAllRows(query, [parent.id]);
             },
@@ -318,41 +318,7 @@
         },
 
         Avatar: {
-        //     user: async (parent) => {
-        //         return getSingleRow("SELECT * FROM users WHERE id = ?", [
-        //             parent.userId,
-        //         ]);
-        //     },
-        //     performances: async (parent) => {
-        //         const query = `
-        //   SELECT p.*
-        //   FROM performances p
-        //   JOIN performanceCast pc ON pc.performanceId = p.id
-        //   WHERE pc.avatarId = ?
-        // `;
-        //         return getAllRows(query, [parent.id]);
-        //     },
-        //     avatarMotionData: async (parent) => {
-        //         return getAllRows(
-        //             "SELECT * FROM avatarMotionData WHERE avatarId = ?",
-        //             [parent.id]
-        //         );
-        //     },
-        //     faceData: async (parent) => {
-        //         return getAllRows("SELECT * FROM faceData WHERE avatarId = ?", [
-        //             parent.id,
-        //         ]);
-        //     },
-        //     audioData: async (parent) => {
-        //         return getAllRows("SELECT * FROM audioData WHERE avatarId = ?", [
-        //             parent.id,
-        //         ]);
-        //     },
         },
-
-        // lightData: [LightData]
-        // audioData: [AudioData]
-        // propMotionData: [PropMotionData]
 
         AvatarMotionData: {
             avatar: async (parent) => {

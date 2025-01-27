@@ -2,11 +2,11 @@
 DROP TABLE IF EXISTS userAttendance;
 DROP TABLE IF EXISTS sessionStates;
 DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS performanceCast;
 DROP TABLE IF EXISTS avatars;
 DROP TABLE IF EXISTS scenesPerformances;
 DROP TABLE IF EXISTS xrLives;
 DROP TABLE IF EXISTS performances;
+DROP TABLE IF EXISTS performanceAvatars;
 DROP TABLE IF EXISTS performanceMembership;
 DROP TABLE IF EXISTS usdScenes;
 DROP TABLE IF EXISTS usdSceneMembership;
@@ -61,7 +61,8 @@ CREATE TABLE usdSceneMembership (
     
 CREATE TABLE IF NOT EXISTS xrLives
 (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    streamingUrl TEXT DEFAULT NULL
 );
     
 CREATE TABLE IF NOT EXISTS performances (
@@ -97,15 +98,13 @@ CREATE TABLE IF NOT EXISTS avatars (
     FOREIGN KEY (userId) REFERENCES users (id)
 );
 
--- Performance Cast Table
-CREATE TABLE IF NOT EXISTS performanceCast (
+-- Represents the avatars that the performance will have
+CREATE TABLE IF NOT EXISTS performanceAvatars (
     performanceId INTEGER NOT NULL,
-    userId INTEGER NOT NULL,
     avatarId INTEGER NOT NULL,
     FOREIGN KEY (performanceId) REFERENCES performances (id),
-    FOREIGN KEY (userId) REFERENCES users (id),
     FOREIGN KEY (avatarId) REFERENCES avatars (id),
-    PRIMARY KEY (performanceId, userId, avatarId)
+    PRIMARY KEY (performanceId, avatarId)
 );
 
 -- Prop Motion Data Table
@@ -235,15 +234,23 @@ INSERT INTO usdAssetLibrary (pCloudFileId, fileUrl) VALUES
     (1, 'https://example.com/asset1.usd'),
     (2, 'https://example.com/asset2.usd');
                                                         
-INSERT INTO xrLives DEFAULT VALUES;
-INSERT INTO xrLives DEFAULT VALUES;
-INSERT INTO xrLives DEFAULT VALUES;
+INSERT INTO xrLives (streamingUrl) VALUES 
+    ('https://example.com/watch/stream/1'),
+    ('https://example.com/watch/stream/2'),
+    ('https://example.com/watch/stream/3');
 
-INSERT INTO performances (ownerId, title, about)VALUES
+INSERT INTO performances (ownerId, title, about) VALUES
     (1, 'Othello', 'Shakespear wrote that'),
     (2, 'Interstellar', 'Interstellar description'),
     (3, 'Performance 3', 'Performance 3 description'),
     (4, 'No Membership Performance', 'No Membership Performance 3 description');
+
+INSERT INTO performanceAvatars (performanceId, avatarId) VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (2, 1),
+    (2, 2);
 
 INSERT INTO performanceMembership (userId, performanceId)  VALUES
     (1, 1),
@@ -265,11 +272,6 @@ INSERT INTO avatars (name, userId) VALUES
     ('Avatar1', 1),
     ('Avatar2', 2),
     ('Avatar3', 3);
-
-INSERT INTO performanceCast (userId, avatarId, performanceId) VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 3,3);
 
 INSERT INTO propMotionData (sessionId, pCloudFileId, fileUrl, propId, initialPosition, initialRotation) VALUES
     (1, 3001, 'https://example.com/prop_motion.bvh', 1, '{"x":0,"y":0,"z":0}', '{"x":0,"y":0,"z":0}'),
