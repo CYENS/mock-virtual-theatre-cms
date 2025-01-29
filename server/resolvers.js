@@ -458,6 +458,12 @@
             performance: async (parent) => {
                 return getSingleRow("SELECT * FROM performances WHERE id = ?", [parent.performanceId]);
             },
+            scene: async (parent) => {
+                return getSingleRow("SELECT * FROM usdScenes WHERE id = ?", [parent.sceneId]);
+            },
+            xrLive: async (parent) => {
+                return getSingleRow("SELECT * FROM xrLives WHERE id = ?", [parent.xrLiveId]);
+            },
             motionData: async (parent) => {
                 return getAllRows("SELECT * FROM avatarMotionData WHERE sessionId = ?", [parent.id])
             },

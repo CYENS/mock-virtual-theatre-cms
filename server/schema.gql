@@ -90,13 +90,14 @@
     title: String
     state: String
     owner: User
+    scene: USDScene
+    xrLive: XR_Live
     performance: Performance
     motionData: [AvatarMotionData]
     faceData: [FaceData]
     lightData: [LightData]
     audioData: [AudioData]
     propMotionData: [PropMotionData]
-    streamingUrl: String
     attendees: [User]
     castAvatars: [SessionCast]
   }
@@ -176,6 +177,7 @@
 
   type XR_Live {
     id: ID!
+    streamingUrl: String
   }
   
   """
