@@ -144,6 +144,15 @@
     createdAt: DateTime
   }
   
+  """
+  input used for creating a performance
+  """
+  input PerformanceCreateInput {
+    ownerId: ID!
+    title: String!
+    about: String
+  }
+  
   
   """
   input used for querying user
@@ -269,6 +278,8 @@
     ): Session
     
     createUser(data: UserCreateInput!): User
+    
+    createPerformance(data: PerformanceCreateInput!): Performance
     
     """
     Create a new session state entry

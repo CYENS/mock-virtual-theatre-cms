@@ -169,6 +169,44 @@
                     });
                 });
             },
+            createPerformance: async (_, args) => {
+                const {
+                    ownerId,
+                    title,
+                    about = "" 
+                } = args.data;
+
+                return new Promise((resolve, reject) => {
+                    const params = [
+                        title,
+                        about,
+                        ownerId,
+                    ];
+
+                    const query = `
+                        INSERT INTO performances (title, about, ownerId) VALUES (?, ?, ?)
+                    `;
+
+                    db.run(query, params, function (err) {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        // Retrieve the newly created session using the last inserted ID
+                        db.get(
+                            "SELECT * FROM performances WHERE id = ?",
+                            [this.lastID],
+                            (err, newSession) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                resolve(newSession);
+                            }
+                        );
+                    })
+
+                });
+            },
             createUser: async (_, args, { dataSources }) => {
                 const {
                     eosId = "",
