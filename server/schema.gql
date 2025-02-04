@@ -167,6 +167,11 @@
     id: ID
   }
   
+  input PerformanceUpdateInput {
+    title: String
+    about: String
+  }
+  
   """
   A scene that can be linked to one or multiple performances.
   """
@@ -286,6 +291,7 @@
     
     createPerformance(data: PerformanceCreateInput!): Performance
     deletePerformance(where: PerformanceWhereUniqueInput!): Performance
+    updatePerformance(where: PerformanceWhereUniqueInput!, data: PerformanceUpdateInput!): Performance
     
     """
     Create a new session state entry

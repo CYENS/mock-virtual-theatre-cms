@@ -220,6 +220,17 @@
                 const deletedRow = await getSingleRow(query, params)
                 return deletedRow;
             },
+            updatePerformance: async (_, { where, data }) => {
+                const { id } = where
+                const { title, about } = data
+
+                const params = [ title, about, id ];
+                const query = `
+                    UPDATE performances SET title = ?, about = ? WHERE id = ? RETURNING *;
+                `;
+                const updatedRow = await getSingleRow(query, params)
+                return updatedRow;
+            },
             createUser: async (_, args, { dataSources }) => {
                 const {
                     eosId = "",
