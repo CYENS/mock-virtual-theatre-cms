@@ -83,6 +83,10 @@
             performanceById: async (_, { id }) => {
                 return getSingleRow("SELECT * FROM performances WHERE id = ?", [id]);
             },
+            performance: async (_,  { where } ) => {
+                const { id } = where;
+                return getSingleRow("SELECT * FROM performances WHERE id = ?", [id]);
+            },
 
             // Avatars
             avatars: async () => {
@@ -206,6 +210,15 @@
                     })
 
                 });
+            },
+            deletePerformance: async (_, { where }) => {
+                const { id } = where
+                const params = [ id ];
+                const query = `
+                    DELETE FROM performances WHERE id = ? RETURNING *;
+                `;
+                const deletedRow = await getSingleRow(query, params)
+                return deletedRow;
             },
             createUser: async (_, args, { dataSources }) => {
                 const {

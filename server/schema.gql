@@ -163,6 +163,10 @@
     email: String
   }
   
+  input PerformanceWhereUniqueInput {
+    id: ID
+  }
+  
   """
   A scene that can be linked to one or multiple performances.
   """
@@ -243,6 +247,7 @@
     # Performances
     performances: [Performance]
     performanceById(id: ID): Performance
+    performance(where: PerformanceWhereUniqueInput!): Performance
 
     # Avatars
     avatars: [Avatar]
@@ -280,6 +285,7 @@
     createUser(data: UserCreateInput!): User
     
     createPerformance(data: PerformanceCreateInput!): Performance
+    deletePerformance(where: PerformanceWhereUniqueInput!): Performance
     
     """
     Create a new session state entry
