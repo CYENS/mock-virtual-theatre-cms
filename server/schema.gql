@@ -153,7 +153,6 @@
     about: String
   }
   
-  
   """
   input used for querying user
   """
@@ -177,7 +176,7 @@
   """
   type USDScene {
     id: ID!
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     title: String
     owner: User
@@ -185,6 +184,29 @@
     template: Boolean
     public: Boolean
     performances: [Performance]
+  }
+  
+  input USDSceneWhereUniqueInput {
+    id: ID
+    pCloudFileId: ID
+  }
+  
+  input USDSceneCreateInput {
+    ownerId: ID
+    pCloudFileId: ID
+    fileUrl: String
+    title: String
+    template: Boolean
+    public: Boolean
+  }
+  
+  input USDSceneUpdateInput {
+    ownerId: ID
+    pCloudFileId: ID
+    fileUrl: String
+    title: String
+    template: Boolean
+    public: Boolean
   }
 
   type USDAssetLibrary {
@@ -243,7 +265,8 @@
 
     # Scenes
     usdScenes: [USDScene]
-    sceneById(id: ID): USDScene
+    usdSceneById(id: ID): USDScene
+    usdScene(where: USDSceneWhereUniqueInput!): USDScene
     
     usdAssetLibraries: [USDAssetLibrary]
 
@@ -288,6 +311,10 @@
     ): Session
     
     createUser(data: UserCreateInput!): User
+    
+    createUsdScene(data: USDSceneCreateInput!): USDScene
+    deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
+    updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
     
     createPerformance(data: PerformanceCreateInput!): Performance
     deletePerformance(where: PerformanceWhereUniqueInput!): Performance

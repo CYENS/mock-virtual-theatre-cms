@@ -60,8 +60,23 @@
             usdScenes: async () => {
                 return getAllRows("SELECT * FROM usdScenes");
             },
-            sceneById: async (_, { id }) => {
+            usdSceneById: async (_, { id }) => {
                 return getSingleRow("SELECT * FROM usdScenes WHERE id = ?", [id]);
+            },
+            usdScene: async (_, { where }) => {
+                const { id, pCloudFileId } = where
+                const params = {$id: id, $pCloudFileId: pCloudFileId};
+                // const params = [id, id, pCloudFileId];
+                const query = `
+                    SELECT * FROM usdScenes
+                    WHERE
+                        CASE
+                            WHEN $id IS NOT NULL THEN id = $id
+                            ELSE pCloudFileId = $pCloudFileId
+                        END
+                `;
+                const retrievedRow = await getSingleRow(query, params)
+                return retrievedRow;
             },
             
             usdAssetLibraries: async () => {
@@ -339,6 +354,77 @@
                         resolve(this.changes > 0);
                     });
                 });
+            },
+
+            createUsdScene: async (_, { data }) => {
+                const {
+                    pCloudFileId,
+                    fileUrl,
+                    title,
+                    ownerId,
+                    template,
+                } = data;
+                const isPublic = data.public;
+                const params = [
+                    pCloudFileId,
+                    fileUrl,
+                    title,
+                    ownerId,
+                    template,
+                    isPublic,
+                ];
+                const query = `
+                    INSERT INTO usdScenes (pCloudFileId, fileUrl, title, ownerId, template, public) 
+                    VALUES (?, ?, ?, ?, ?, ?) RETURNING *;
+                `;
+                const insertedRow = await getSingleRow(query, params)
+                return insertedRow;
+            },
+            deleteUsdScene: async (_, { where }) => {
+                const { id, pCloudFileId } = where
+                const params = {$id: id, $pCloudFileId: pCloudFileId};
+                // const params = [id, id, pCloudFileId];
+                const query = `
+                    DELETE FROM usdScenes
+                    WHERE
+                        CASE
+                            WHEN $id IS NOT NULL THEN id = $id
+                            ELSE pCloudFileId = $pCloudFileId
+                        END
+                    RETURNING *;
+                `;
+                const deletedRow = await getSingleRow(query, params)
+                return deletedRow;
+            },
+            updateUsdScene: async (_, { where, data }) => {
+                const { pCloudFileId, fileUrl, title, ownerId, template, public: isPublic } = data;
+                const params = {
+                    $whereId: where.id, 
+                    $wherePCloudFileId: where.pCloudFileId,
+                    $pCloudFileId: pCloudFileId,
+                    $fileUrl: fileUrl,
+                    $title: title,
+                    $ownerId: ownerId,
+                    $template: template,
+                    $public: isPublic,
+                };
+
+                const query = `
+                    UPDATE usdScenes SET 
+                        pCloudFileId = coalesce($pCloudFileId, pCloudFileId),
+                        fileUrl = coalesce($fileUrl, fileUrl),
+                        title = coalesce($title, title),
+                        ownerId = coalesce($ownerId, ownerId),
+                        template = coalesce($template, template)
+                    WHERE
+                        CASE
+                            WHEN $whereId IS NOT NULL THEN id = $whereId
+                            ELSE pCloudFileId = $wherePCloudFileId
+                        END
+                    RETURNING *;
+                `;
+                const updatedRow = await getSingleRow(query, params)
+                return updatedRow;
             },
 
         },
