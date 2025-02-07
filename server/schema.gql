@@ -320,7 +320,7 @@
     createUsdScene(data: USDSceneCreateInput!): USDScene
     deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
     updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
-    removeUsdSceneFromPerformance(where: RemoveSceneFromPerformanceInput!): USDScene
+    removeUsdSceneFromPerformance(where: RemoveSceneFromPerformanceInput!): Performance
     
     createPerformance(data: PerformanceCreateInput!): Performance
     deletePerformance(where: PerformanceWhereUniqueInput!): Performance
