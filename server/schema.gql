@@ -191,7 +191,7 @@
     pCloudFileId: ID
   }
   
-  input RemoveSceneFromPerformanceInput {
+  input UsdScenePerformanceWhereInput {
     usdSceneId: ID!
     performanceId: ID!
   }
@@ -320,7 +320,7 @@
     createUsdScene(data: USDSceneCreateInput!): USDScene
     deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
     updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
-    removeUsdSceneFromPerformance(where: RemoveSceneFromPerformanceInput!): Performance
+    removeUsdSceneFromPerformance(where: UsdScenePerformanceWhereInput!): Performance
     
     createPerformance(data: PerformanceCreateInput!): Performance
     deletePerformance(where: PerformanceWhereUniqueInput!): Performance
