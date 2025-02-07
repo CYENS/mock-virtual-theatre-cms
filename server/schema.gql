@@ -317,7 +317,7 @@
     
     createUser(data: UserCreateInput!): User
     
-    createUsdScene(data: USDSceneCreateInput!): USDScene
+    createUsdScene(data: UsdSceneCreateInput!): USDScene
     deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
     updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
 
