@@ -460,6 +460,43 @@
                 );
                 return updatedPerformance;
             },
+            addUserToPerformance: async (_, { where } ) => {
+                const { userId, performanceId } = where;
+
+                await runQuery(`
+                    INSERT INTO performanceMembership
+                    (userId, performanceId)
+                    VALUES (?, ?);
+                `, [userId, performanceId])
+
+                const updatedPerformance = await getSingleRow(
+                    "SELECT * FROM performances WHERE id = ?",
+                    [performanceId]
+                );
+                return updatedPerformance;
+            },
+            removeUserFromPerformance: async (_, { where } ) => {
+                const { userId, performanceId } = where;
+                const existingRecord = await getSingleRow(
+                    "SELECT * FROM performanceMembership WHERE performanceId = ? AND userId = ?",
+                    [performanceId, userId]
+                );
+                if (!existingRecord) {
+                    throw new Error('Scene or Performance not found, or no existing relationship to remove.');
+                }
+
+                await runQuery(`
+                  DELETE FROM performanceMembership
+                  WHERE performanceId = ?
+                  AND userId = ?
+                `, [performanceId, userId])
+
+                const updatedPerformance = await getSingleRow(
+                    "SELECT * FROM performances WHERE id = ?",
+                    [performanceId]
+                );
+                return updatedPerformance;
+            },
             addUsdSceneToPerformance: async (_, { where } ) => {
                 const { usdSceneId, performanceId } = where;
 

@@ -196,6 +196,11 @@
     performanceId: ID!
   }
   
+  input UserPerformanceWhereUniqueInput {
+    userId: ID!
+    performanceId: ID!
+  }
+  
   input UsdSceneCreateInput {
     ownerId: ID
     pCloudFileId: ID
@@ -329,6 +334,8 @@
     updatePerformance(where: PerformanceWhereUniqueInput!, data: PerformanceUpdateInput!): Performance
     removeUsdSceneFromPerformance(where: UsdScenePerformanceWhereInput!): Performance
     addUsdSceneToPerformance(where: UsdScenePerformanceWhereInput!): Performance
+    removeUserFromPerformance(where: UserPerformanceWhereUniqueInput!): Performance
+    addUserToPerformance(where: UserPerformanceWhereUniqueInput!): Performance
     
     """
     Create a new session state entry
