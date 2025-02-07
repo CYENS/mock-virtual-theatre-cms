@@ -196,7 +196,7 @@
     performanceId: ID!
   }
   
-  input USDSceneCreateInput {
+  input UsdSceneCreateInput {
     ownerId: ID
     pCloudFileId: ID
     fileUrl: String
