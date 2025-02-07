@@ -321,6 +321,7 @@
     deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
     updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
     removeUsdSceneFromPerformance(where: UsdScenePerformanceWhereInput!): Performance
+    addUsdSceneToPerformance(where: UsdScenePerformanceWhereInput!): Performance
     
     createPerformance(data: PerformanceCreateInput!): Performance
     deletePerformance(where: PerformanceWhereUniqueInput!): Performance

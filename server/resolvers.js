@@ -458,6 +458,21 @@
                     [performanceId]
                 );
                 return updatedPerformance;
+            },
+            addUsdSceneToPerformance: async (_, { where } ) => {
+                const { usdSceneId, performanceId } = where;
+
+                await runQuery(`
+                    INSERT INTO scenesPerformances
+                    (sceneId, performanceId)
+                    VALUES (?, ?);
+                `, [usdSceneId, performanceId])
+
+                const updatedPerformance = await getSingleRow(
+                    "SELECT * FROM performances WHERE id = ?",
+                    [performanceId]
+                );
+                return updatedPerformance;
             }
         },
 
