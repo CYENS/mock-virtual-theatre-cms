@@ -426,7 +426,8 @@
                         fileUrl = coalesce($fileUrl, fileUrl),
                         title = coalesce($title, title),
                         ownerId = coalesce($ownerId, ownerId),
-                        template = coalesce($template, template)
+                        template = coalesce($template, template),
+                        public = coalesce($public, public)
                     WHERE
                         CASE
                             WHEN $whereId IS NOT NULL THEN id = $whereId

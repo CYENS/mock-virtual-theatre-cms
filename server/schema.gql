@@ -186,7 +186,7 @@
     performances: [Performance]
   }
   
-  input USDSceneWhereUniqueInput {
+  input UsdSceneWhereUniqueInput {
     id: ID
     pCloudFileId: ID
   }
@@ -205,7 +205,7 @@
     public: Boolean
   }
   
-  input USDSceneUpdateInput {
+  input UsdSceneUpdateInput {
     ownerId: ID
     pCloudFileId: ID
     fileUrl: String
@@ -271,7 +271,7 @@
     # Scenes
     usdScenes: [USDScene]
     usdSceneById(id: ID): USDScene
-    usdScene(where: USDSceneWhereUniqueInput!): USDScene
+    usdScene(where: UsdSceneWhereUniqueInput!): USDScene
     
     usdAssetLibraries: [USDAssetLibrary]
 
@@ -318,8 +318,8 @@
     createUser(data: UserCreateInput!): User
     
     createUsdScene(data: UsdSceneCreateInput!): USDScene
-    deleteUsdScene(where: USDSceneWhereUniqueInput!): USDScene
-    updateUsdScene(where: USDSceneWhereUniqueInput!, data: USDSceneUpdateInput!): USDScene
+    deleteUsdScene(where: UsdSceneWhereUniqueInput!): USDScene
+    updateUsdScene(where: UsdSceneWhereUniqueInput!, data: UsdSceneUpdateInput!): USDScene
 
     """
     performance mutations
