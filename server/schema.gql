@@ -10,7 +10,7 @@
   type AvatarMotionData {
     id: ID!
     session: Session
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     initialPositionX: Float
     initialPositionY: Float
@@ -27,7 +27,7 @@
   type LightData {
     id: ID!
     session: Session
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     lightId: Int
     initialPositionX: Float
@@ -46,7 +46,7 @@
   type FaceData {
     id: ID!
     session: Session
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     avatar: Avatar
   }
@@ -57,7 +57,7 @@
   type AudioData {
     id: ID!
     session: Session
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     avatar: Avatar
   }
@@ -68,7 +68,7 @@
   """
   type PropMotionData {
     id: ID!
-    pCloudFileId: Int
+    pCloudFileId: ID
     fileUrl: String
     session: Session
     initialPositionX: Float
@@ -211,7 +211,7 @@
 
   type USDAssetLibrary {
     id: ID!
-    pCloudFileId: Int
+    pCloudFileId: ID
     assetLibraryJson: String
   }
 
