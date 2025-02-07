@@ -17,6 +17,17 @@
             });
         });
     
+    const runQuery = async (query, params) => {
+        await new Promise((resolve, reject) => {
+            db.run(query, params, function (err) {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(true);
+            });
+        });
+    }
+    
     async function getStateIdFromState(state) {
         const stateRow = await getSingleRow("SELECT id FROM sessionStates WHERE name = ?", [state]);
         return stateRow.id;
@@ -426,7 +437,28 @@
                 const updatedRow = await getSingleRow(query, params)
                 return updatedRow;
             },
+            removeUsdSceneFromPerformance: async (_, { where } ) => {
+                const { usdSceneId, performanceId } = where;
+                const existingRecord = await getSingleRow(
+                    "SELECT * FROM scenesPerformances WHERE performanceId = ? AND sceneId = ?",
+                    [performanceId, usdSceneId]
+                );
+                if (!existingRecord) {
+                    throw new Error('Scene or Performance not found, or no existing relationship to remove.');
+                }
 
+                await runQuery(`
+                  DELETE FROM scenesPerformances
+                  WHERE performanceId = ?
+                  AND sceneId = ?
+                `, [performanceId, usdSceneId])
+
+                const updatedPerformance = await getSingleRow(
+                    "SELECT * FROM performances WHERE id = ?",
+                    [performanceId]
+                );
+                return updatedPerformance;
+            }
         },
 
         // Field resolvers
